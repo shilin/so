@@ -22,7 +22,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     before { get :show, id: question.id }
 
-    it 'assigns the requested question to @questions' do
+    it 'assigns the requested question to @question' do
       expect(assigns(:question)).to eq question
     end
 
@@ -31,4 +31,41 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
+  describe 'GET #new' do
+    before { get :new }
+
+    it 'creates new question and assigns it to @question' do
+      expect(assigns(:question)).to be_a_new(Question)
+    end
+
+    it 'renders new template' do
+      expect(response).to render_template :new
+    end
+  end
+
+  describe 'GET #edit' do
+
+    let(:question) { create(:question) }
+    before { get :edit, id: question}
+    it 'assigns the requested question to @question' do
+      expect(assigns(:question)).to eq question
+    end
+
+    it 'renders edit template' do
+      expect(response).to render_template :edit
+    end
+  end
+
+  describe 'POST #create' do
+
+    let(:question) { build(:question)}
+    post :create, title: question.title, body: question.body
+
+    it 'creates new question according to params' do
+      expect(Question.count).to change_by(1)
+    end
+    it 'renders index view' do
+      expect(response).to redirect_to :index
+    end
+  end
 end
