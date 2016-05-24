@@ -1,6 +1,10 @@
 FactoryGirl.define do
+  sequence :title do |n|
+    "MyTitle#{n}"
+  end
+
   factory :question do
-    title "MyTitle"
+    title
     body "MyBody"
   end
 
@@ -8,4 +12,5 @@ FactoryGirl.define do
     title nil
     body nil
   end
+
 end
