@@ -13,6 +13,6 @@ feature 'User can see list of question', %q{
   scenario 'User visits questions resource' do
     visit questions_path
 
-    expect(page).to have_content('MyTitle', count: 3)
+    expect(page).to have_content('MyQuestionTitle', count: 3)
   end
 end

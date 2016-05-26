@@ -14,9 +14,8 @@ feature 'User can answer a question', %q{
     fill_in :answer_body, with: 'MyAnswer'
     click_on 'Create'
 
-    save_and_open_page
-
-
     expect(page).to have_content 'Your answer has been submitted!'
+    #TODO expect(page).to have_content 'MyAnswer'
+    
   end
 end

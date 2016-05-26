@@ -1,5 +1,13 @@
-p=  @question.title
-p=  @question.body
+p
+  = @question.title
+p
+  = @question.body
+
+p
+  - @question.answers.each do |a|
+    p
+      = a.body
+      
 
 = form_for [@question, @answer] do |f|
   = f.label :body
