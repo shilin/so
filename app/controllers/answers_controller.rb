@@ -4,6 +4,7 @@ class AnswersController < ApplicationController
     @answer = @question.answers.build(answer_params)
 
     if @answer.save
+      flash[:notice] = 'Your answer has been submitted!'
       redirect_to @question
     else
       render :new
