@@ -6,9 +6,11 @@ feature 'User can see a question and its answers', %q{
   I want to be able to see a question and its answers
 } do
 
-  given(:question) { create(:question) }
+  given(:user) { create(:user) }
+  given(:user2) { create(:user) }
+  given(:question) { create(:question, user: user) }
 
-  before { create_list(:answer, 3, question: question) }
+  before { create_list(:answer, 3, question: question, user: user2) }
 
   scenario "User visits question view" do
     visit question_path(question)

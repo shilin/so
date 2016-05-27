@@ -3,7 +3,7 @@ class AnswersController < ApplicationController
 
   def create
     @question = Question.find(params[:question_id])
-    @answer = @question.answers.build(answer_params)
+    @answer = @question.answers.build(answer_params.merge(user: current_user))
 
     if @answer.save
       flash[:notice] = 'Your answer has been submitted!'

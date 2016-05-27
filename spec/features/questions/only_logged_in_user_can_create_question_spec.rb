@@ -29,7 +29,6 @@ feature 'User creates question', %q{
       click_on 'Ask a new question'
       fill_in 'question_title', with: invalid_question.title
       fill_in 'question_body', with:  invalid_question.body
-      save_and_open_page
       click_on 'Create'
 
       expect(page).to have_content 'Error creating your question!'

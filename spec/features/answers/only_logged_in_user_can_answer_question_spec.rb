@@ -6,8 +6,8 @@ feature 'User can answer a question', %q{
   I want to be able to give an answer to a question
 } do
 
-  given(:question) { create(:question) }
   given(:user) { create(:user) }
+  given(:question) { create(:question, user: user) }
 
   context 'Authenticated user' do
     background { sign_in(user) }

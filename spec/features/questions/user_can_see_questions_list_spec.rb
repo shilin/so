@@ -6,9 +6,10 @@ feature 'User can see list of question', %q{
   I want to be able to see list of questions
 } do
 
-  background do
-    3.times { create(:question) }
-  end
+  given(:user) { create(:user) }
+
+  background { create_list(:question, 3, user: user) }
+
 
   scenario 'User visits questions resource' do
     visit questions_path

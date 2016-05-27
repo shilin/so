@@ -2,12 +2,12 @@ require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
 
-  let(:question) { create(:question) }
   let(:invalid_question) { create(:invalid_question) }
+  let(:author) { create(:user) }
+  let(:user) { create(:user) }
+  let(:questions) { create_list(:question, 2, user_id: user.id) }
 
   describe 'GET #index' do
-    let(:questions) { create_list(:question, 2) }
-
     before { get :index }
 
     it 'populates an array of all questions' do
@@ -21,6 +21,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'GET #show' do
 
+    let(:question) { create(:question, user: user) }
     before { get :show, id: question.id }
 
     it 'assigns the requested question to @question' do
@@ -66,20 +67,9 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #edit' do
-    context 'Authenticated user' do
-      sign_in_user
-      before { get :edit, id: question}
-
-      it 'assigns the requested question to @question' do
-        expect(assigns(:question)).to eq question
-      end
-
-      it 'renders edit template' do
-        expect(response).to render_template :edit
-      end
-    end
-
     context 'Not authenticated user' do
+      let(:question) { create(:question, user: user) }
+
       before { get :edit, id: question}
 
       it 'does not assign the requested question to @question' do
@@ -90,12 +80,42 @@ RSpec.describe QuestionsController, type: :controller do
         expect(response).to redirect_to new_user_session_path
       end
     end
+
+    context 'Authenticated user' do
+      sign_in_user
+      let(:question) { create(:question, user: author) }
+      before { get :edit, id: question }
+
+      it 'does not assign the requested question to @question' do
+        expect(assigns(:question)).to eq question
+      end
+
+      it 'redirects to show view' do
+        expect(response).to redirect_to question_path(assigns(:question))
+      end
+    end
+
+    context 'Author' do
+      sign_in_user
+      let(:question) { create(:question, user: @user) }
+      before { get :edit, id: question }
+
+      it 'assigns the requested question to @question' do
+        expect(assigns(:question)).to eq question
+      end
+
+      it 'renders edit template' do
+        expect(response).to render_template :edit
+      end
+    end
+
   end
 
   describe 'POST #create' do
 
     context 'authenticated user' do
       sign_in_user
+      let(:question) { create(:question, user: @user) }
       context 'with valid attributes' do
 
         it 'creates new question and saves it into DB' do
@@ -128,6 +148,52 @@ RSpec.describe QuestionsController, type: :controller do
       it 'redirects to sign in view' do
         post :create, question: attributes_for(:question)
         expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+  end
+
+  describe 'DELETE #destroy' do
+    let(:question) { create(:question, user: author) }
+
+    context 'Not authenticated user' do
+      it 'does not delete question from DB' do
+        question
+        expect { delete :destroy, id: question.id }.to_not change(Question, :count)
+      end
+
+      it 'redirects to sign in view' do
+        delete :destroy, id: question
+        expect(response).to redirect_to new_user_session_path
+      end
+
+    end
+
+
+    context 'Authenticated user' do
+      sign_in_user
+      it 'does not delete question from DB' do
+        question
+        expect { delete :destroy, id: question }.to_not change(Question, :count)
+      end
+
+      it 'redirects to show view' do
+        delete :destroy, id: question
+        expect(response).to redirect_to question_path(assigns(:question))
+      end
+    end
+
+    context 'Author' do
+      sign_in_user
+      let(:question_of_signed_in_user) { create(:question, user: @user) }
+      it 'deletes question from DB' do
+        question_of_signed_in_user
+        expect { delete :destroy, id: question_of_signed_in_user }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirects to show view' do
+        delete :destroy, id: question_of_signed_in_user
+        expect(response).to redirect_to questions_path
       end
     end
 
