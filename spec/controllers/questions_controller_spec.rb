@@ -38,54 +38,97 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
-    before { get :new }
 
-    it 'creates new question and assigns it to @question' do
-      expect(assigns(:question)).to be_a_new(Question)
+    context 'Not authenticated user' do
+      before { get :new }
+      it 'does not create new question' do
+        expect(assigns(:question)).to be_nil
+      end
+
+      it 'redirects to sign_in view' do
+        expect(response).to redirect_to new_user_session_path
+      end
+
     end
 
-    it 'renders new template' do
-      expect(response).to render_template :new
+    context 'authenticated user' do
+      sign_in_user
+      before { get :new }
+
+      it 'creates new question and assigns it to @question' do
+        expect(assigns(:question)).to be_a_new(Question)
+      end
+
+      it 'renders new template' do
+        expect(response).to render_template :new
+      end
     end
   end
 
   describe 'GET #edit' do
-    before { get :edit, id: question}
+    context 'Authenticated user' do
+      sign_in_user
+      before { get :edit, id: question}
 
-    it 'assigns the requested question to @question' do
-      expect(assigns(:question)).to eq question
+      it 'assigns the requested question to @question' do
+        expect(assigns(:question)).to eq question
+      end
+
+      it 'renders edit template' do
+        expect(response).to render_template :edit
+      end
     end
 
-    it 'renders edit template' do
-      expect(response).to render_template :edit
+    context 'Not authenticated user' do
+      before { get :edit, id: question}
+
+      it 'does not assign the requested question to @question' do
+        expect(assigns(:question)).to be_nil
+      end
+
+      it 'redirects to sign in view' do
+        expect(response).to redirect_to new_user_session_path
+      end
     end
   end
 
   describe 'POST #create' do
 
-    context 'with valid attributes' do
+    context 'authenticated user' do
+      sign_in_user
+      context 'with valid attributes' do
 
-      it 'creates new question and saves into DB' do
-        expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
+        it 'creates new question and saves it into DB' do
+          expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
+        end
+
+        it 'redirects to show view' do
+          post :create, question: attributes_for(:question)
+          expect(response).to redirect_to question_path(assigns(:question))
+        end
+
       end
 
-      it 'redirects to show view' do
-        post :create, question: attributes_for(:question)
-        expect(response).to redirect_to question_path(assigns(:question))
-      end
+      context 'with invalid attributes' do
 
+        it 'does not save question into DB' do
+          expect { post :create, question: attributes_for(:invalid_question) }.to_not change(Question, :count)
+        end
+        it 're-renders new view' do
+          post :create, question: attributes_for(:invalid_question)
+          expect(response).to render_template :new
+        end
+      end
     end
 
-    context 'with invalid attributes' do
-
+    context 'not authenticated user with valid attributes' do
       it 'does not save question into DB' do
-        expect { post :create, question: attributes_for(:invalid_question) }.to_not change(Question, :count)
+        expect { post :create, question: attributes_for(:question) }.to_not change(Question, :count)
       end
-      it 're-renders new view' do
-        post :create, question: attributes_for(:invalid_question)
-        expect(response).to render_template :new
+      it 'redirects to sign in view' do
+        post :create, question: attributes_for(:question)
+        expect(response).to redirect_to new_user_session_path
       end
-
     end
 
   end

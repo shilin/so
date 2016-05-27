@@ -9,8 +9,9 @@ p
       = a.body
       
 
-= form_for [@question, @answer] do |f|
-  = f.label :body
-  = f.text_area :body
-  = f.submit 'Create'
+- if current_user
+  = form_for [@question, @answer] do |f|
+    = f.label :body
+    = f.text_area :body
+    = f.submit 'Create'
 
