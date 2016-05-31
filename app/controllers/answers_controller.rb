@@ -13,6 +13,18 @@ class AnswersController < ApplicationController
     end
   end
 
+  def destroy
+    @answer = Answer.find(params[:id])
+    @question = @answer.question
+    if current_user && (current_user.id == @answer.user_id) && @answer.destroy
+      flash[:notice] = "Answer has been successfully deleted"
+    else
+      flash[:error] = "You are not permitted to delete the answer"
+    end
+    redirect_to question_path(@question)
+  end
+
+
   private
 
   def answer_params
