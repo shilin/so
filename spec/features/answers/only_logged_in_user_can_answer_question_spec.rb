@@ -18,7 +18,7 @@ feature 'User can answer a question', %q{
       click_on 'Create'
 
       expect(page).to have_content 'Your answer has been submitted!'
-      #TODO expect(page).to have_content 'MyAnswer'
+      expect(page).to have_content 'MyAnswer'
     end
   end
 
