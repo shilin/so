@@ -17,8 +17,11 @@ feature 'User can answer a question', %q{
       fill_in :answer_body, with: 'MyAnswer'
       click_on 'Create'
 
+      expect(current_path).to eq question_path(question)
       expect(page).to have_content 'Your answer has been submitted!'
-      expect(page).to have_content 'MyAnswer'
+      within('#answers_list') do
+        expect(page).to have_content 'MyAnswer'
+      end
     end
   end
 
