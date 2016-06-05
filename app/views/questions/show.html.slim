@@ -1,7 +1,5 @@
-p
-  = @question.title
-p
-  = @question.body
+h1= @question.title
+p= @question.body
 p= link_to 'Delete', question_path(@question), method: 'delete'
 
 #answers_list
@@ -15,7 +13,7 @@ p= link_to 'Delete', question_path(@question), method: 'delete'
 
 - if current_user
   = form_for [@question, @answer] do |f|
-    = f.label :body
+    = f.label 'Your answer'
     = f.text_area :body
     = f.submit 'Create'
 

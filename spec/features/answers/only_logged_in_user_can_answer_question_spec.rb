@@ -23,6 +23,19 @@ feature 'User can answer a question', %q{
         expect(page).to have_content 'MyAnswer'
       end
     end
+
+    scenario 'tries to create an invalid answer to a question' do
+      visit question_path(question)
+
+      fill_in :answer_body, with: nil
+      click_on 'Create'
+
+      expect(current_path).to eq question_path(question)
+      expect(page).to have_content 'Unable to submit your answer'
+      within('#answers_list') do
+        expect(page).to_not have_content 'MyAnswer'
+      end
+    end
   end
 
   context 'Not authenticated user' do

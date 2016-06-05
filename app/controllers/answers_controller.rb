@@ -7,10 +7,11 @@ class AnswersController < ApplicationController
 
     if @answer.save
       flash[:notice] = 'Your answer has been submitted!'
-      redirect_to @question
     else
-      render :new
+      flash[:alert] = 'Unable to submit your answer'
     end
+
+   redirect_to @question
   end
 
   def destroy
@@ -19,7 +20,7 @@ class AnswersController < ApplicationController
     if current_user && (current_user.id == @answer.user_id) && @answer.destroy
       flash[:notice] = "Answer has been successfully deleted"
     else
-      flash[:error] = "You are not permitted to delete the answer"
+      flash[:alert] = "You are not permitted to delete the answer"
     end
     redirect_to question_path(@question)
   end

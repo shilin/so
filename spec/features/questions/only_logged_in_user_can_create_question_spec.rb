@@ -22,7 +22,6 @@ feature 'User creates question', %q{
 
       expect(page).to have_content 'Your question has been successfully created!'
       expect(page).to have_content question.title
-      expect(current_page).to eq question_path(question)
     end
 
     scenario 'tries to create an invalid question' do
