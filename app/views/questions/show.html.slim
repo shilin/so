@@ -3,16 +3,11 @@ p= @question.body
 p= link_to 'Delete', question_path(@question), method: 'delete'
 
 #answers_list
-  - @question.answers.each do |a|
-    p
-      = a.body
-    - if current_user && (current_user.id == a.user_id)
-      span 
-        = link_to 'Delete answer', a, method: :delete
+  =render partial: 'shared/answer', collection: @question.answers
 
 
 - if current_user
-  = form_for [@question, @answer] do |f|
+  = form_for [@question, @answer], remote: true do |f|
     = f.label 'Your answer'
     = f.text_area :body
     = f.submit 'Create'

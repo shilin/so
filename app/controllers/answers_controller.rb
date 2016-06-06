@@ -6,12 +6,10 @@ class AnswersController < ApplicationController
     @answer = @question.answers.build(answer_params.merge(user: current_user))
 
     if @answer.save
-      flash[:notice] = 'Your answer has been submitted!'
+      flash.now[:notice] = 'Your answer has been submitted!'
     else
-      flash[:alert] = 'Unable to submit your answer'
+      flash.now[:alert] = 'Unable to submit your answer'
     end
-
-   redirect_to @question
   end
 
   def destroy

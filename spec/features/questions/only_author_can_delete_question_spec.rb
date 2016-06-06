@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../feature_helper'
 
 feature 'Only author is able to delete a question', %q{
   In order to remove bad question
