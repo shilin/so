@@ -8,10 +8,7 @@ html
 
   body
 
-    p.notice
-      = notice
-    p.alert
-      = alert
+    = render 'shared/flash'
 
     ul.hmenu
       = render 'devise/shared/login_items'

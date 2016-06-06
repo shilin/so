@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../feature_helper'
 
 feature 'Only author is able to delete answer', %q{
   In order to remove wrong answers

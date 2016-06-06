@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative '../feature_helper'
 
 feature 'User can answer a question', %q{
   In order to help people
@@ -11,14 +11,29 @@ feature 'User can answer a question', %q{
 
   context 'Authenticated user' do
     background { sign_in(user) }
-    scenario 'creates an answer to a question' do
+
+    scenario 'creates an answer to a question', js: true do
       visit question_path(question)
 
       fill_in :answer_body, with: 'MyAnswer'
       click_on 'Create'
 
+      expect(current_path).to eq question_path(question)
       expect(page).to have_content 'Your answer has been submitted!'
-      expect(page).to have_content 'MyAnswer'
+      within('#answers_list') do
+        expect(page).to have_content 'MyAnswer'
+      end
+    end
+
+    scenario 'tries to create an invalid answer to a question', js: true do
+      visit question_path(question)
+
+      fill_in :answer_body, with: nil
+      click_on 'Create'
+
+      expect(current_path).to eq question_path(question)
+      expect(page).to have_content 'Unable to submit your answer'
+      expect(page).to_not have_content 'MyAnswer'
     end
   end
 

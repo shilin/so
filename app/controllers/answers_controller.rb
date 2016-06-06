@@ -6,10 +6,9 @@ class AnswersController < ApplicationController
     @answer = @question.answers.build(answer_params.merge(user: current_user))
 
     if @answer.save
-      flash[:notice] = 'Your answer has been submitted!'
-      redirect_to @question
+      flash.now[:notice] = 'Your answer has been submitted!'
     else
-      render :new
+      flash.now[:alert] = 'Unable to submit your answer'
     end
   end
 
@@ -19,7 +18,7 @@ class AnswersController < ApplicationController
     if current_user && (current_user.id == @answer.user_id) && @answer.destroy
       flash[:notice] = "Answer has been successfully deleted"
     else
-      flash[:error] = "You are not permitted to delete the answer"
+      flash[:alert] = "You are not permitted to delete the answer"
     end
     redirect_to question_path(@question)
   end
