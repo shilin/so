@@ -1,5 +1,4 @@
 FactoryGirl.define do
-
   sequence :email do |n|
     "user#{n}@test.com"
   end
@@ -13,5 +12,4 @@ FactoryGirl.define do
     password '12345678'
     email 'author@test.com'
   end
-
 end

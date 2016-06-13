@@ -1,11 +1,10 @@
 require 'rails_helper'
 
-feature 'User can sign out', %q{
+feature 'User can sign out', %q(
   In order to be safe
   As a signed in user
   I want to be able to sign out
-} do
-
+) do
   given(:user) { create(:user) }
 
   scenario 'Signed-in user signs out' do
@@ -22,7 +21,4 @@ feature 'User can sign out', %q{
 
     expect(page).not_to have_content 'Log out'
   end
-
-
-
 end

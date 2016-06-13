@@ -1,12 +1,10 @@
 require 'rails_helper'
 
-feature 'User can register', %q{
+feature 'User can register', %q(
   In order to be able to sign in
   As a user
   I want to be able to register
-} do
-
-
+) do
   given(:user) { create(:user) }
 
   scenario 'Not registered user registers' do
@@ -31,5 +29,4 @@ feature 'User can register', %q{
     expect(page).to have_content 'Email has already been taken'
     expect(page).to have_content 'Sign up'
   end
-
 end

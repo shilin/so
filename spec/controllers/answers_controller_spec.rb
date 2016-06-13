@@ -1,26 +1,24 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-
   let(:user) { create(:user) }
   let(:author) { create(:user) }
   let(:question) { create(:question, user: user) }
 
-
   describe 'POST #create' do
-
-  let(:answer) { build(:answer) }
+    let(:answer) { build(:answer) }
 
     context 'Authenticated user' do
       sign_in_user
       context 'with valid attributes' do
         it 'saves an answer to DB for the right question' do
-          expect { post :create,
-                   answer: attributes_for(:answer),
-                   question_id: question,
-                   format: :js
-                  }.
-                    to change(question.answers, :count).by(1)
+          expect do
+            post :create,
+                 answer: attributes_for(:answer),
+                 question_id: question,
+                 format: :js
+          end
+            .to change(question.answers, :count).by(1)
         end
 
         it 'renders show create view for answer' do
@@ -37,14 +35,14 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'Not authenticated user' do
-        it 'does not save an answer to DB' do
-          expect { post :create, answer: attributes_for(:answer), question_id: question }.not_to change(Answer, :count)
-        end
+      it 'does not save an answer to DB' do
+        expect { post :create, answer: attributes_for(:answer), question_id: question }.not_to change(Answer, :count)
+      end
 
-        it 'redirects to sign in view' do
-          post :create, answer: attributes_for(:answer), question_id: question
-          expect(response).to redirect_to new_user_session_path
-        end
+      it 'redirects to sign in view' do
+        post :create, answer: attributes_for(:answer), question_id: question
+        expect(response).to redirect_to new_user_session_path
+      end
     end
   end
 
@@ -61,9 +59,7 @@ RSpec.describe AnswersController, type: :controller do
         delete :destroy, id: answer, question_id: question
         expect(response).to redirect_to new_user_session_path
       end
-
     end
-
 
     context 'Authenticated user' do
       sign_in_user
@@ -91,10 +87,5 @@ RSpec.describe AnswersController, type: :controller do
         expect(response).to redirect_to question_path(assigns(:question))
       end
     end
-
   end
-
-
-
-
 end

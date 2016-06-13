@@ -1,11 +1,10 @@
 require_relative '../feature_helper'
 
-feature 'User creates question', %q{
+feature 'User creates question', %q(
   In order to get an answer
   As a user
   I want to be able to create a question
-} do
-
+) do
   given(:question) { build(:question) }
   given(:invalid_question) { build(:invalid_question) }
   given(:user) { create(:user) }
@@ -42,5 +41,4 @@ feature 'User creates question', %q{
       expect(page).to have_content 'You need to sign in or sign up before continuing.'
     end
   end
-
 end

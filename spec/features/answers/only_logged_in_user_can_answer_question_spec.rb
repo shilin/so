@@ -1,11 +1,10 @@
 require_relative '../feature_helper'
 
-feature 'User can answer a question', %q{
+feature 'User can answer a question', %q(
   In order to help people
   As a user
   I want to be able to give an answer to a question
-} do
-
+) do
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
 
@@ -33,6 +32,7 @@ feature 'User can answer a question', %q{
 
       expect(current_path).to eq question_path(question)
       expect(page).to have_content 'Unable to submit your answer'
+      expect(page).to have_content "Body can't be blank"
       expect(page).to_not have_content 'MyAnswer'
     end
   end
@@ -41,10 +41,7 @@ feature 'User can answer a question', %q{
     scenario 'tries to give an answer' do
       visit question_path(question)
 
-      expect(page).not_to have_css ('form#new_answer')
-
+      expect(page).not_to have_css 'form#new_answer'
     end
   end
-
 end
-

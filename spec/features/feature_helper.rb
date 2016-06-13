@@ -1,9 +1,11 @@
+require_relative '../rails_helper'
+
 Capybara.javascript_driver = :webkit
 
 RSpec.configure do |config|
   config.use_transactional_fixtures = false
 
-  config.include FeaturesHelpers, type: :feature
+  config.include FeaturesMacros, type: :feature
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
@@ -24,7 +26,4 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
-
 end
-
-

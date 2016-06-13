@@ -1,7 +1,6 @@
 class QuestionsController < ApplicationController
-
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_question, only: [:show, :edit, :destroy]
+  before_action :load_question, only: [:show, :edit, :destroy, :update]
 
   def index
     @questions = Question.all
@@ -31,16 +30,22 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    @question = Question.find(params[:id])
     if current_user && current_user.id == @question.user.id && @question.destroy
-      flash[:notice] = "Question has been successfully deleted"
+      flash[:notice] = 'Question has been successfully deleted'
       redirect_to questions_path
     else
-      flash[:error] = "You are not permitted to delete the question"
+      flash[:error] = 'You are not permitted to delete the question'
       redirect_to question_path(@question)
     end
   end
 
+  def update
+    if current_user && (current_user.id == @question.user.id) && @question.update_attributes(question_params)
+      flash[:notice] = 'Question has been successfully updated'
+    else
+      flash[:error] = 'Unable to update question'
+    end
+  end
 
   private
 
@@ -51,5 +56,4 @@ class QuestionsController < ApplicationController
   def load_question
     @question = Question.find(params[:id])
   end
-
 end

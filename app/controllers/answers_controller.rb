@@ -1,5 +1,5 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, except: [:index,:show]
+  before_action :authenticate_user!, except: [:index, :show]
 
   def create
     @question = Question.find(params[:question_id])
@@ -16,13 +16,12 @@ class AnswersController < ApplicationController
     @answer = Answer.find(params[:id])
     @question = @answer.question
     if current_user && (current_user.id == @answer.user_id) && @answer.destroy
-      flash[:notice] = "Answer has been successfully deleted"
+      flash[:notice] = 'Answer has been successfully deleted'
     else
-      flash[:alert] = "You are not permitted to delete the answer"
+      flash[:alert] = 'You are not permitted to delete the answer'
     end
     redirect_to question_path(@question)
   end
-
 
   private
 
