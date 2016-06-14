@@ -1,8 +1,15 @@
 - if answer.persisted?
-  ul
-    li
-      = answer.body
-      - if current_user && (current_user.id == answer.user_id)
-        span
-          = link_to 'Delete answer', answer, method: :delete
+  li id="answer_block_#{answer.id}"
+    = answer.body
+    - if current_user_author?(answer)
+      span
+        = link_to 'Delete answer', answer, method: :delete
+        = link_to 'Edit answer', '', class: 'edit-answer-link', data: {answer_id: answer.id}
+
+        = form_for answer, remote: true, html: {class: 'hidden'} do |f|
+          = f.label :body, 'Answer body'
+          = f.text_area :body
+          <br/>
+          = f.submit 'Save answer'
+
 

@@ -88,4 +88,53 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #update' do
+    context 'author' do
+      sign_in_user
+      let(:answer) { create(:answer, question: question, user: @user) }
+      context 'with valid attributes' do
+        it 'updates answer that belongs to current user and saves it into DB' do
+          patch :update, id: answer, answer: { body: 'edited_answer' }, format: :js
+          answer.reload
+
+          expect(answer.body).to eq 'edited_answer'
+        end
+
+        it 'renders update js view' do
+          patch :update, id: answer, answer: { body: 'edited_answer' }, format: :js
+          expect(response).to render_template :update
+        end
+      end
+
+      context 'with invalid attributes' do
+        it 'does not save answer into DB' do
+          patch :update, id: answer, answer: { body: nil }, format: :js
+          answer.reload
+          expect(answer.body).to_not be_nil
+        end
+        it 'renders update js view' do
+          patch :update, id: answer, answer: { body: nil }, format: :js
+          expect(response).to render_template :update
+        end
+      end
+    end
+
+    context 'not authenticated user with valid attributes' do
+      sign_in_user
+      let(:answer) { create(:answer, question: question, user: author) }
+
+      it 'does not update answer' do
+        patch :update, id: answer, answer: { body: 'edited_answer' }, format: :js
+        answer.reload
+
+        expect(answer.body).to_not eq 'edited_answer'
+      end
+
+      it 'renders update js view' do
+        patch :update, id: answer, answer: { body: 'edited_answer' }, format: :js
+        expect(response).to render_template :update
+      end
+    end
+  end
 end

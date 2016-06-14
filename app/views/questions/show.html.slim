@@ -15,7 +15,8 @@
   = f.submit 'Save'
 
 #answers_list
-  =render partial: 'shared/answer', collection: @question.answers
+  ul
+    =render partial: 'shared/answer', collection: @question.answers
 
 
 - if current_user
