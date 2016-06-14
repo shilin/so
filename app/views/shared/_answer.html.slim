@@ -3,7 +3,7 @@
     = answer.body
     - if current_user_author?(answer)
       span
-        = link_to 'Delete answer', answer, method: :delete
+        = link_to 'Delete answer', answer, remote: true, method: :delete
         = link_to 'Edit answer', '', class: 'edit-answer-link', data: {answer_id: answer.id}
 
         = form_for answer, remote: true, html: {class: 'hidden'} do |f|

@@ -5,7 +5,7 @@
 <% end %>
 
   <% else %>
-      $('.question').html('<%= j render "questions/q_title_body", question: @question %>')
+      $('.question').html('<%= j render partial: "questions/q_title_body", locals: {q_title_body: @question} %>')
 <% end %>
 
 

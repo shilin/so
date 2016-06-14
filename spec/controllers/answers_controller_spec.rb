@@ -52,12 +52,12 @@ RSpec.describe AnswersController, type: :controller do
     context 'Not authenticated user' do
       it 'does not delete answer from DB' do
         answer
-        expect { delete :destroy, id: answer.id }.to_not change(Answer, :count)
+        expect { delete :destroy, id: answer.id, format: :js }.to_not change(Answer, :count)
       end
 
-      it 'redirects to sign in view' do
-        delete :destroy, id: answer, question_id: question
-        expect(response).to redirect_to new_user_session_path
+      it 'return unauthorized http status' do
+        delete :destroy, id: answer, question_id: question, format: :js
+        expect(response).to have_http_status(:unauthorized)
       end
     end
 
@@ -65,12 +65,12 @@ RSpec.describe AnswersController, type: :controller do
       sign_in_user
       it 'does not delete answer from DB' do
         answer
-        expect { delete :destroy, id: answer }.to_not change(Answer, :count)
+        expect { delete :destroy, id: answer, format: :js }.to_not change(Answer, :count)
       end
 
-      it 'redirects to question show view' do
-        delete :destroy, id: answer
-        expect(response).to redirect_to question_path(assigns(:question))
+      it 'renders destroy js view' do
+        delete :destroy, id: answer, format: :js
+        expect(response).to render_template :destroy
       end
     end
 
@@ -79,12 +79,12 @@ RSpec.describe AnswersController, type: :controller do
       let(:answer) { create(:answer, question: question, user: @user) }
       it 'deletes answer from DB' do
         answer
-        expect { delete :destroy, id: answer }.to change(Answer, :count).by(-1)
+        expect { delete :destroy, id: answer, format: :js }.to change(Answer, :count).by(-1)
       end
 
-      it 'redirects to show view' do
-        delete :destroy, id: answer
-        expect(response).to redirect_to question_path(assigns(:question))
+      it 'return ok http status' do
+        delete :destroy, id: answer, format: :js
+        expect(response).to have_http_status(:ok)
       end
     end
   end
@@ -120,7 +120,7 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context 'not authenticated user with valid attributes' do
+    context 'authenticated user with valid attributes' do
       sign_in_user
       let(:answer) { create(:answer, question: question, user: author) }
 
@@ -134,6 +134,22 @@ RSpec.describe AnswersController, type: :controller do
       it 'renders update js view' do
         patch :update, id: answer, answer: { body: 'edited_answer' }, format: :js
         expect(response).to render_template :update
+      end
+    end
+
+    context 'Not authenticated user with valid attributes' do
+      let(:answer) { create(:answer, question: question, user: author) }
+
+      it 'does not update answer' do
+        patch :update, id: answer, answer: { body: 'edited_answer' }, format: :js
+        answer.reload
+
+        expect(answer.body).to_not eq 'edited_answer'
+      end
+
+      it 'return unauthorized http status' do
+        patch :update, id: answer, answer: { body: 'edited_answer' }, format: :js
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end

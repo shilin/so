@@ -5,10 +5,11 @@
 <% end %>
 
   <% else %>
-      $('#answers_list ul').append('<%= j render "shared/answer", answer: @answer %>')
-    $('#answer_body').val('')
+      $("#answer_block_<%=@answer.id%>").remove()
 <% end %>
 
 
 $('#flash').html('<%= j render "shared/flash" %>')
+
+
 

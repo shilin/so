@@ -29,7 +29,6 @@ class AnswersController < ApplicationController
     else
       flash[:alert] = 'You are not permitted to delete the answer'
     end
-    redirect_to question_path(@question)
   end
 
   private

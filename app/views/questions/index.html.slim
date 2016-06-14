@@ -1,8 +1,3 @@
-p
-  ul
-    - @questions.each do |q|
-      li=  q.title
-      li=  q.body
-
+=render partial: 'q_title_body', collection: @questions
 p
   = link_to 'Ask a new question', new_question_path

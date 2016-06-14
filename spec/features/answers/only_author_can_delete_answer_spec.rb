@@ -8,11 +8,12 @@ feature 'Only author is able to delete answer', %q(
   given(:user) { create(:user) }
   given(:author) { create(:user) }
   given(:question) { create(:question, user: user) }
-  given(:answer) { create(:answer, question: question, user: author) }
+  given!(:answer) { create(:answer, question: question, user: author) }
 
   scenario 'Unauthenticated user tries to delete an answer' do
     visit question_path(question)
-    within('#answers_list') do
+
+    within("#answer_block_#{answer.id}") do
       expect(page).to_not have_content 'Delete answer'
     end
   end
@@ -21,14 +22,16 @@ feature 'Only author is able to delete answer', %q(
     sign_in(user)
     visit question_path(question)
 
-    expect(page).to_not have_content 'Delete answer'
+    within("#answer_block_#{answer.id}") do
+      expect(page).to_not have_content 'Delete answer'
+    end
   end
 
-  scenario 'Author deletes an answer' do
+  scenario 'Author deletes an answer', js: true do
     sign_in(author)
-    answer
     visit question_path(question)
-    within('#answers_list') do
+
+    within("#answer_block_#{answer.id}") do
       click_on 'Delete answer'
     end
 
