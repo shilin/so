@@ -18,7 +18,9 @@ Rails.application.routes.draw do
   #   resources :products
 
   resources :questions, shallow: true do
-    resources :answers
+    resources :answers do
+      patch :set_best, on: :member
+    end
   end
 
   # Example resource route with options:

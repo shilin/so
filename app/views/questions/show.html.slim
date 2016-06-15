@@ -11,7 +11,7 @@
 
 #answers_list
   ul
-    =render partial: 'shared/answer', collection: @question.answers
+    =render partial: 'shared/answer', collection: @question.answers.best_first
 
 
 - if current_user

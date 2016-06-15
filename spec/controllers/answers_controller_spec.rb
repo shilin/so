@@ -153,4 +153,60 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #set_best' do
+    context 'author' do
+      sign_in_user
+      let(:question) { create(:question, user: @user) }
+      let(:answer) { create(:answer, question: question, user: user) }
+      context 'with valid attributes' do
+        it 'set answer as best for question that belongs to current user and saves it into DB' do
+          patch :set_best, id: answer, answer: { best: true }, format: :js
+          answer.reload
+
+          expect(answer.best?).to be true
+        end
+
+        it 'renders set_best js view' do
+          patch :set_best, id: answer, answer: { best: true }, format: :js
+          expect(response).to render_template :set_best
+        end
+      end
+    end
+
+    context 'authenticated user' do
+      sign_in_user
+      let(:question) { create(:question, user: user) }
+      let(:answer) { create(:answer, question: question, user: author) }
+
+      it 'does not set answer as best' do
+        patch :set_best, id: answer, answer: { best: true }, format: :js
+        answer.reload
+
+        expect(answer.best?).to be false
+      end
+
+      it 'renders set_best js view' do
+        patch :set_best, id: answer, answer: { best: true }, format: :js
+        expect(response).to render_template :set_best
+      end
+    end
+
+    context 'Not authenticated user' do
+      let(:answer) { create(:answer, question: question, user: author) }
+
+      it 'does not set answer as best' do
+        patch :set_best, id: answer, answer: { best: true }, format: :js
+        answer.reload
+
+        expect(answer.best?).to be false
+      end
+
+      it 'return unauthorized http status' do
+        patch :set_best, id: answer, answer: { best: true }, format: :js
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
 end
