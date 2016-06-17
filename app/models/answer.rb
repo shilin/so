@@ -7,8 +7,9 @@ class Answer < ActiveRecord::Base
   validates :body, :question_id, :user_id, presence: true
 
   def set_as_best
-    Answer.where(question_id: question_id, best: true).update_all(best: false)
-    self.update!(best: true)
+    transaction do
+      Answer.where(question_id: question_id, best: true).update_all(best: false)
+      update!(best: true)
+    end
   end
 end
-
