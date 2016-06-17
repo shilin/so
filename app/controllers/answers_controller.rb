@@ -34,7 +34,7 @@ class AnswersController < ApplicationController
   def set_best
     @answer = Answer.find(params[:id])
     @question = @answer.question
-    if current_user && (current_user.id == @question.user_id) && @answer.update_attributes(answer_params)
+    if current_user && (current_user.id == @question.user_id) && @answer.set_as_best
       flash[:notice] = 'Answer has been successfully set as best'
     else
       flash[:alert] = 'Unable to set answer as best'

@@ -6,11 +6,9 @@ class Answer < ActiveRecord::Base
 
   validates :body, :question_id, :user_id, presence: true
 
-  before_save :ensure_answers_unbest, if: ->() { best_changed? }
-
-  protected
-
-  def ensure_answers_unbest
+  def set_as_best
     Answer.where(question_id: question_id, best: true).update_all(best: false)
+    self.update!(best: true)
   end
 end
+
