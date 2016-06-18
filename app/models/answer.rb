@@ -1,6 +1,7 @@
 class Answer < ActiveRecord::Base
   scope :best_first, -> { order(best: :desc, created_at: :asc) }
 
+  has_many :attachments, as: :attachable, dependent: :destroy
   belongs_to :question
   belongs_to :user
 
