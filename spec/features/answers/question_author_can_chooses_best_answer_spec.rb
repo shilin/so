@@ -7,13 +7,13 @@ feature 'Only author can choose the best answer for his question', %q(
 ) do
   given(:author) { create(:user) }
   given(:user) { create(:user) }
-  given(:question) { create(:question, user: author)}
-  given!(:answers) { create_list(:answer, 3, question: question, user: user)}
+  given(:question) { create(:question, user: author) }
+  given!(:answers) { create_list(:answer, 3, question: question, user: user) }
 
   scenario 'Unauthenticated user tries to choose the best answer' do
     visit question_path(question)
 
-    within("#answers_list") do
+    within('#answers_list') do
       expect(page).to_not have_content 'Set as best answer'
     end
   end
@@ -22,7 +22,7 @@ feature 'Only author can choose the best answer for his question', %q(
     sign_in(user)
     visit question_path(question)
 
-    within("#answers_list") do
+    within('#answers_list') do
       expect(page).to_not have_content 'Set as best answer'
     end
   end
@@ -31,7 +31,7 @@ feature 'Only author can choose the best answer for his question', %q(
     sign_in(author)
     visit question_path(question)
 
-    within("#answers_list") do
+    within('#answers_list') do
       expect(page).to have_content 'Set as best answer'
     end
 

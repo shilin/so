@@ -1,6 +1,11 @@
 = div_for q_title_body
-  h1= q_title_body.title
-  p= q_title_body.body
+  h1
+    = q_title_body.title
+  p
+    = q_title_body.body
+  p
+    - q_title_body.attachments.each do |a|
+      = link_to a.file.file.filename, a.file.url
   - if current_user_author?(q_title_body)
     p= link_to 'Delete', question_path(q_title_body), method: 'delete'
     p= link_to 'Edit', '', class: 'edit-question-link'

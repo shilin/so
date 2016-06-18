@@ -1,17 +1,10 @@
-=render partial: 'q_title_body', locals: {q_title_body: @question}
+= render 'q_title_body',  q_title_body: @question
 
-= form_for @question, remote: true do |f|
-  = f.label :title, 'Question title'
-  = f.text_area :title
-  <br/>
-  = f.label :body, 'Question body'
-  = f.text_area :body
-  <br/>
-  = f.submit 'Save'
+= render 'q_form', question: @question
 
 #answers_list
   ul
-    =render partial: 'shared/answer', collection: @question.answers.best_first
+    = render partial: 'shared/answer', collection: @question.answers.best_first
 
 
 - if current_user
