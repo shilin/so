@@ -15,7 +15,7 @@ feature 'User can add files to his question', %q(
     fill_in 'question_title', with: 'Question title'
     fill_in 'question_body', with:  'Question body'
     attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
-    click_on 'Create'
+    click_on 'Save'
 
     expect(page).to have_content 'Your question has been successfully created!'
     expect(page).to have_link 'rails_helper.rb', href: '/uploads/attachment/file/1/rails_helper.rb'

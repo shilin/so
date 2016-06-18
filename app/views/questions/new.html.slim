@@ -1,13 +1,1 @@
-=  form_for @question do |f|
-  = f.label :title
-  = f.text_field :title
-  <br/>
-  = f.label :body
-  = f.text_area :body
-  <br/>
-  = f.fields_for :attachments do |a|
-    = a.label :file
-    = a.file_field :file
-    <br/>
-  = f.submit  'Create'
-
+= render 'q_form', question: @question

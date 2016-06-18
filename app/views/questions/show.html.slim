@@ -9,8 +9,5 @@
 
 - if current_user
   #validation_errors
-  = form_for [@question, @answer], remote: true do |f|
-    = f.label :body, 'Your answer'
-    = f.text_area :body
-    = f.submit 'Create'
+  = render 'shared/a_form', question: @question, answer: @answer
 

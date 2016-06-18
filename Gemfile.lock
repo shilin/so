@@ -186,6 +186,7 @@ GEM
       ffi (>= 0.5.0)
     rdoc (4.2.2)
       json (~> 1.4)
+    remotipart (1.2.1)
     responders (2.2.0)
       railties (>= 4.2.0, < 5.1)
     rspec (3.4.0)
@@ -289,6 +290,7 @@ DEPENDENCIES
   launchy
   pg (~> 0.15)
   rails (= 4.2.6)
+  remotipart
   rspec-rails
   rubocop
   sass-rails (~> 5.0)

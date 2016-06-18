@@ -34,6 +34,10 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:answer)).to be_a_new(Answer)
       expect(assigns(:answer).question_id).to eq question.id
     end
+
+    it 'builds new empty attachment for new empty answer' do
+      expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
+    end
   end
 
   describe 'GET #new' do
@@ -63,7 +67,6 @@ RSpec.describe QuestionsController, type: :controller do
       it 'renders new template' do
         expect(response).to render_template :new
       end
-
     end
   end
 

@@ -1,6 +1,9 @@
 - if answer.persisted?
   li id="answer_block_#{answer.id}"
     = answer.body
+    - answer.attachments.each do |a|
+      <br/>
+      = link_to a.file.file.filename, a.file.url
     - if current_user_author?(answer)
       span
         = link_to 'Delete answer', answer, remote: true, method: :delete

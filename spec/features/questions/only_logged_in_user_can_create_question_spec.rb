@@ -17,7 +17,7 @@ feature 'User creates question', %q(
       click_on 'Ask a new question'
       fill_in 'question_title', with: question.title
       fill_in 'question_body', with:  question.body
-      click_on 'Create'
+      click_on 'Save'
 
       expect(page).to have_content 'Your question has been successfully created!'
       expect(page).to have_content question.title
@@ -28,7 +28,7 @@ feature 'User creates question', %q(
       click_on 'Ask a new question'
       fill_in 'question_title', with: invalid_question.title
       fill_in 'question_body', with:  invalid_question.body
-      click_on 'Create'
+      click_on 'Save'
 
       expect(page).to have_content 'Error creating your question!'
     end
