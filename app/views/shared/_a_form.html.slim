@@ -1,8 +1,14 @@
 = form_for [question, answer], remote: true do |f|
-  = f.label :body, 'Your answer'
-  = f.text_area :body
+
+  .field
+    = f.label :body, 'Your answer'
+    = f.text_area :body
   <br/>
-  = f.fields_for :attachments do |a|
-    = a.label :file
-    = a.file_field :file
+
+  #attachments
+    = f.fields_for :attachments do |attachment|
+      = render 'shared/attachment_fields', f: attachment
+    .links
+      = link_to_add_association 'add file', f, :attachments, partial: 'shared/attachment_fields'
+
   = f.submit 'Save'

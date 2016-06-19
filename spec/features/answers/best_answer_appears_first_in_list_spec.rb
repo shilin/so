@@ -14,9 +14,9 @@ feature 'Answer, chosen by question author appears first in list', %q(
     answers.second.update!(best: true)
 
     visit question_path(question)
-    answer_block_id_of_the_first_answer_in_answers_list = find(:xpath, '//*[@id="answers_list"]/ul/li[1]')[:id]
-    answer_block_id_of_the_first_answer_in_answers_list.slice!('answer_block_')
-    first_answer_in_the_list = Answer.find(answer_block_id_of_the_first_answer_in_answers_list)
+    first_block_id = find(:xpath, '//*[@id="answers_list"]/ul/li[1]')[:id]
+    first_block_id.slice!('answer_block_')
+    first_answer_in_the_list = Answer.find(first_block_id)
 
     expect(first_answer_in_the_list).to be_best
   end
