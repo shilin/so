@@ -1,0 +1,13 @@
+.field
+  = f.label :title, 'Question title'
+  = f.text_area :title
+
+.field
+  = f.label :body, 'Question body'
+  = f.text_area :body
+
+#attachments
+  = f.fields_for :attachments do |attachment|
+    = render 'shared/attachment_fields', f: attachment
+  .links
+    = link_to_add_association 'add file', f, :attachments, partial: 'shared/attachment_fields'

@@ -1,11 +1,12 @@
 = render 'q_title_body',  q_title_body: @question
 
-= render 'q_form', question: @question
+= form_for @question, remote: true do |f|
+  = render 'question_fields', question: @question, f: f
+  = f.submit 'Save'
 
 #answers_list
   ul
     = render partial: 'shared/answer', collection: @question.answers.best_first
-
 
 - if current_user
   #validation_errors

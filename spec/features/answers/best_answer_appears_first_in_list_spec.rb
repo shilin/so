@@ -14,6 +14,7 @@ feature 'Answer, chosen by question author appears first in list', %q(
     answers.second.update!(best: true)
 
     visit question_path(question)
+    # TODO: refactor id extraction from string
     first_block_id = find('#answers_list ul li:first-child')[:id]
     first_block_id.slice!('answer_block_')
     first_answer_in_the_list = Answer.find(first_block_id)
