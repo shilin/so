@@ -1,7 +1,7 @@
 = render 'q_title_body',  q_title_body: @question
 
 = form_for @question, remote: true do |f|
-  = render 'question_fields', question: @question, f: f
+  = render 'question_title_body_fields', question: @question, f: f
   = f.submit 'Save'
 
 #answers_list
@@ -10,5 +10,7 @@
 
 - if current_user
   #validation_errors
-  = render 'shared/a_form', question: @question, answer: @answer
+  = form_for [@question, @answer], remote: true do |f|
+    = render 'shared/answer_fields', f: f
+    = f.submit 'Save'
 

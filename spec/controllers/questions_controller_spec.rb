@@ -165,8 +165,7 @@ RSpec.describe QuestionsController, type: :controller do
         expect do
           patch :update, id: question,
                          question: { attachments_attributes: { id: attachment.id, _destroy: true } }, format: :js
-        end
-          .to_not change(question.attachments, :count)
+        end.to_not change(question.attachments, :count)
       end
 
       it 'does not update question' do
@@ -180,6 +179,30 @@ RSpec.describe QuestionsController, type: :controller do
       it 'renders update js view' do
         patch :update, id: question, question: { body: 'edited_body', title: 'edited_title' }, format: :js
         expect(response).to render_template :update
+      end
+    end
+
+    context 'Not authenticated user with valid attributes' do
+      let(:question) { create(:question, user: author, attachments: [attachment]) }
+
+      it 'does not remove attachment from question' do
+        expect do
+          patch :update, id: question,
+                         question: { attachments_attributes: { id: attachment.id, _destroy: true } }, format: :js
+        end.to_not change(question.attachments, :count)
+      end
+
+      it 'does not update question' do
+        patch :update, id: question, question: { body: 'edited_body', title: 'edited_title' }, format: :js
+        question.reload
+
+        expect(question.body).to_not eq 'edited_body'
+        expect(question.title).to_not eq 'edited_title'
+      end
+
+      it 'return unauthorized http status' do
+        patch :update, id: question, question: { body: 'edited_body', title: 'edited_title' }, format: :js
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
