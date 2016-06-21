@@ -1,5 +1,7 @@
 FactoryGirl.define do
   factory :attachment do
-    file 'MyString'
+    file do
+      File.open("#{Rails.root}/spec/rails_helper.rb")
+    end
   end
 end

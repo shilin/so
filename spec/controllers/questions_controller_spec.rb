@@ -4,7 +4,8 @@ RSpec.describe QuestionsController, type: :controller do
   let(:invalid_question) { create(:invalid_question) }
   let(:author) { create(:user) }
   let(:user) { create(:user) }
-  let(:questions) { create_list(:question, 2, user_id: user.id) }
+  let(:attachment) { create(:attachment) }
+  let(:questions) { create_list(:question, 2, user_id: user.id, attachments: [attachment]) }
 
   describe 'GET #index' do
     before { get :index }
@@ -117,7 +118,16 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'PATCH #update' do
     context 'author' do
       sign_in_user
-      let(:question) { create(:question, user: @user) }
+      let(:question) { create(:question, user: @user, attachments: [attachment]) }
+
+      it 'removes attachment from question' do
+        expect do
+          patch :update, id: question,
+                         question: { attachments_attributes: { id: attachment.id, _destroy: true } }, format: :js
+        end
+          .to change(question.attachments, :count).by(-1)
+      end
+
       context 'with valid attributes' do
         it 'updates question that belongs to current user and saves it into DB' do
           patch :update, id: question, question: { body: 'edited_body', title: 'edited_title' }, format: :js
@@ -147,9 +157,17 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    context 'not authenticated user with valid attributes' do
+    context 'Authenticated user not author with valid attributes' do
       sign_in_user
-      let(:question) { create(:question, user: author) }
+      let(:question) { create(:question, user: author, attachments: [attachment]) }
+
+      it 'does not remove attachment from question' do
+        expect do
+          patch :update, id: question,
+                         question: { attachments_attributes: { id: attachment.id, _destroy: true } }, format: :js
+        end
+          .to_not change(question.attachments, :count)
+      end
 
       it 'does not update question' do
         patch :update, id: question, question: { body: 'edited_body', title: 'edited_title' }, format: :js

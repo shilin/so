@@ -18,6 +18,6 @@ feature 'User can add files to his question', %q(
     click_on 'Save'
 
     expect(page).to have_content 'Your question has been successfully created!'
-    expect(page).to have_link 'rails_helper.rb', href: '/uploads/attachment/file/1/rails_helper.rb'
+    expect(page).to have_link 'rails_helper.rb'
   end
 end
