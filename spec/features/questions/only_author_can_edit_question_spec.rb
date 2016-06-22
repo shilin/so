@@ -17,7 +17,9 @@ feature 'Author can edit question', %q(
 
     fill_in :question_body, with: 'edited_question'
 
-    click_on 'Save'
+    within('.edit_question') do
+      click_on 'Save'
+    end
 
     within("#question_#{question.id}") do
       expect(page).to have_content('edited_question')

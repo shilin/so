@@ -1,6 +1,14 @@
 - if answer.persisted?
   li id="answer_block_#{answer.id}"
     = answer.body
+
+    - answer.attachments.each do |a|
+      = div_for a
+        = link_to a.file.file.filename, a.file.url
+        - if current_user_author?(answer)
+          = link_to 'Remove file', answer_path(answer,
+            answer: {attachments_attributes: {id: a, _destroy: true}}), remote: true, method: :patch
+
     - if current_user_author?(answer)
       span
         = link_to 'Delete answer', answer, remote: true, method: :delete
@@ -10,8 +18,7 @@
         = link_to 'Set as best answer', set_best_answer_path(answer, answer: {best: true}), method: :patch, remote: true, class: 'set-best-answer-link'
 
         = form_for answer, remote: true, html: {class: 'hidden'} do |f|
-          = f.label :body, 'Answer body'
-          = f.text_area :body
+          = render 'shared/answer_body_fields', f: f
           <br/>
           = f.submit 'Save answer'
 

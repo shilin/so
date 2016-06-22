@@ -4,6 +4,7 @@ RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
   let(:author) { create(:user) }
   let(:question) { create(:question, user: user) }
+  let(:attachment) { create(:attachment) }
 
   describe 'POST #create' do
     let(:answer) { build(:answer) }
@@ -92,7 +93,15 @@ RSpec.describe AnswersController, type: :controller do
   describe 'PATCH #update' do
     context 'author' do
       sign_in_user
-      let(:answer) { create(:answer, question: question, user: @user) }
+      let(:answer) { create(:answer, question: question, user: @user, attachments: [attachment]) }
+
+      it 'removes attachment from question' do
+        expect do
+          patch :update, id: answer,
+                         answer: { attachments_attributes: { id: attachment.id, _destroy: true } }, format: :js
+        end.to change(answer.attachments, :count).by(-1)
+      end
+
       context 'with valid attributes' do
         it 'updates answer that belongs to current user and saves it into DB' do
           patch :update, id: answer, answer: { body: 'edited_answer' }, format: :js
@@ -122,7 +131,14 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'authenticated user with valid attributes' do
       sign_in_user
-      let(:answer) { create(:answer, question: question, user: author) }
+      let(:answer) { create(:answer, question: question, user: author, attachments: [attachment]) }
+
+      it 'does not remove attachment from answer' do
+        expect do
+          patch :update, id: answer,
+                         answer: { attachments_attributes: { id: attachment.id, _destroy: true } }, format: :js
+        end.not_to change(answer.attachments, :count)
+      end
 
       it 'does not update answer' do
         patch :update, id: answer, answer: { body: 'edited_answer' }, format: :js
@@ -138,7 +154,14 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'Not authenticated user with valid attributes' do
-      let(:answer) { create(:answer, question: question, user: author) }
+      let(:answer) { create(:answer, question: question, user: author, attachments: [attachment]) }
+
+      it 'does not remove attachment from answer' do
+        expect do
+          patch :update, id: answer,
+                         answer: { attachments_attributes: { id: attachment.id, _destroy: true } }, format: :js
+        end.not_to change(answer.attachments, :count)
+      end
 
       it 'does not update answer' do
         patch :update, id: answer, answer: { body: 'edited_answer' }, format: :js
@@ -208,5 +231,4 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
-
 end

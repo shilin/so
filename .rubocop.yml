@@ -10,3 +10,4 @@ AllCops:
     - db/migrate/*
     - config/application.rb
     - public/*
+    - public/**/*

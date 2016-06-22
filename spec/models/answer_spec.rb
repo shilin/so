@@ -6,6 +6,7 @@ RSpec.describe Answer, type: :model do
 
   it { should belong_to :question }
   it { should belong_to :user }
+  it { should have_many(:attachments).dependent(:destroy) }
 
   it { should validate_presence_of :body }
   it { should validate_presence_of :question_id }
@@ -22,13 +23,13 @@ RSpec.describe Answer, type: :model do
   end
 
   it 'sets the best answer' do
-    answer1 = create(:answer, question: question, user: user, best: false)
-    answer2 = create(:answer, question: question, user: user, best: false)
-    answer3 = create(:answer, question: question, user: user, best: true)
+    answer = create(:answer, question: question, user: user, best: false)
+    create(:answer, question: question, user: user, best: false)
+    create(:answer, question: question, user: user, best: true)
 
-    answer1.set_as_best
+    answer.set_as_best
 
-    expect(answer1).to be_best
+    expect(answer).to be_best
   end
 
   context 'best scope applied' do

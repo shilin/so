@@ -15,7 +15,7 @@ feature 'User can answer a question', %q(
       visit question_path(question)
 
       fill_in :answer_body, with: 'MyAnswer'
-      click_on 'Create'
+      click_on 'Save'
 
       expect(current_path).to eq question_path(question)
       expect(page).to have_content 'Your answer has been submitted!'
@@ -28,7 +28,7 @@ feature 'User can answer a question', %q(
       visit question_path(question)
 
       fill_in :answer_body, with: nil
-      click_on 'Create'
+      click_on 'Save'
 
       expect(current_path).to eq question_path(question)
       expect(page).to have_content 'Unable to submit your answer'
