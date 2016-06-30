@@ -4,6 +4,7 @@ RSpec.describe QuestionsController, type: :controller do
   let(:invalid_question) { create(:invalid_question) }
   let(:author) { create(:user) }
   let(:user) { create(:user) }
+  let(:not_author) { create(:user) }
   let(:attachment) { create(:attachment) }
   let(:questions) { create_list(:question, 2, user_id: user.id, attachments: [attachment]) }
 
@@ -206,6 +207,59 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #upvote' do
+    context 'author' do
+      sign_in_user
+      let(:question) { create(:question, user: @user) }
+      #let(:error_json) { { message: 'Unable to upvote question'}.to_json }
+
+      it 'does not upvotes the question' do
+        question
+        expect { patch :upvote, id: question, format: :json }.not_to change(question, :rating)
+      end
+
+      it 'renders error_json' do
+        patch :upvote, id: question, format: :json
+        error_json = assigns(:vote).errors.full_messages.to_json
+        expect(response.body).to eq error_json
+        expect(response).to have_http_status :unprocessable_entity
+      end
+    end
+
+    context 'authenticated user' do
+      sign_in_user
+      let!(:question) { create(:question, user: user) }
+      let(:rating_json) { {rating: question.rating, message: 'Question has been successfully upvoted'}.to_json }
+
+      it 'upvotes the question' do
+        patch :upvote, id: question, format: :json
+        expect(question.rating).to eq 1
+      end
+
+      it 'renders rating_json with ok status' do
+        patch :upvote, id: question, format: :json
+        expect(response.body).to eq rating_json
+        expect(response).to have_http_status :ok
+      end
+    end
+
+    context 'Not authenticated user' do
+      let!(:question) { create(:question, user: user) }
+      let(:rating_json) { {rating: question.rating}.to_json }
+
+      it 'does not upvotes the question' do
+        question
+        expect { patch :upvote, id: question, format: :json }.not_to change(question, :rating)
+      end
+
+      it 'return unauthorized http status' do
+        patch :upvote, id: question, format: :json
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
+
 
   describe 'POST #create' do
     context 'authenticated user' do

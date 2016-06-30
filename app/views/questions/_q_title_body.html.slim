@@ -1,6 +1,10 @@
 = div_for q_title_body
   h1
     = q_title_body.title
+  div#rating
+    = q_title_body.rating
+  - if current_user && (q_title_body.user_id != current_user.id)
+    = link_to '+', upvote_question_path(q_title_body), method: :patch, remote: true, data: {type: :json}, class: 'upvote-question-link'
   p
     = q_title_body.body
   p
