@@ -212,7 +212,7 @@ RSpec.describe QuestionsController, type: :controller do
     context 'author' do
       sign_in_user
       let(:question) { create(:question, user: @user) }
-      #let(:error_json) { { message: 'Unable to upvote question'}.to_json }
+      # let(:error_json) { { message: 'Unable to upvote question'}.to_json }
 
       it 'does not upvotes the question' do
         question
@@ -230,7 +230,7 @@ RSpec.describe QuestionsController, type: :controller do
     context 'authenticated user' do
       sign_in_user
       let!(:question) { create(:question, user: user) }
-      let(:rating_json) { {rating: question.rating, message: 'Question has been successfully upvoted'}.to_json }
+      let(:rating_json) { { rating: question.rating, message: 'Question has been successfully upvoted' }.to_json }
 
       it 'upvotes the question' do
         patch :upvote, id: question, format: :json
@@ -246,7 +246,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'Not authenticated user' do
       let!(:question) { create(:question, user: user) }
-      let(:rating_json) { {rating: question.rating}.to_json }
+      let(:rating_json) { { rating: question.rating }.to_json }
 
       it 'does not upvotes the question' do
         question
@@ -259,7 +259,6 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
-
 
   describe 'POST #create' do
     context 'authenticated user' do

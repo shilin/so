@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  #before_action :load_question, only: [:show, :edit, :destroy, :update]
+  # before_action :load_question, only: [:show, :edit, :destroy, :update]
   before_action :load_question, except: [:new, :index, :create]
 
   def index
@@ -55,11 +55,11 @@ class QuestionsController < ApplicationController
     @vote.user_id = current_user.id
     @vote.state = 1
 
-      if current_user && (current_user.id != @question.user_id) && @vote.save
-        render json: {rating: @question.rating, message: 'Question has been successfully upvoted'}, status: :ok
-      else
-        render json:  @vote.errors.full_messages, status: :unprocessable_entity
-      end
+    if current_user && (current_user.id != @question.user_id) && @vote.save
+      render json: { rating: @question.rating, message: 'Question has been successfully upvoted' }, status: :ok
+    else
+      render json:  @vote.errors.full_messages, status: :unprocessable_entity
+    end
   end
 
   private
