@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-
   it_behaves_like 'voted'
 
   let(:invalid_question) { create(:invalid_question) }

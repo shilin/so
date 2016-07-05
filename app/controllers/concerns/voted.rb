@@ -6,22 +6,18 @@ module Voted
   end
 
   def upvote
-    @vote = @votable.votes.build
-    @vote.user_id = current_user.id
-    @vote.state = 1
-
-    if current_user && (current_user.id != @votable.user_id) && @vote.save
-        render json: { rating: @votable.rating, message: 'Question has been successfully upvoted' }, status: :ok
-      else
-        render json:  @vote.errors.full_messages, status: :unprocessable_entity
+    if @votable.upvote(current_user)
+      render json: { rating: @votable.rating, message: 'Question has been successfully upvoted' }, status: :ok
+    else
+      render json: { message: 'Unable to upvote' }, status: :unprocessable_entity
     end
   end
 
   def set_votable
-    @votable = model_class.find(params[:id])
+    @votable = model_klass.find(params[:id])
   end
 
-  def model_class
+  def model_klass
     controller_name.classify.constantize
   end
 end

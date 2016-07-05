@@ -19,13 +19,13 @@ feature 'User upvotes and downvotes a question', %q(
         expect(page).to have_content 'Question has been successfully upvoted'
       end
 
-#      scenario 'downvotes a question' do
-#        sign_in(user)
-#        visit question_path(question)
-#
-#        find('.question a.downvote-question-link').click
-#        expect(page).to have_content 'Question has been successfully downvoted'
-#      end
+      #      scenario 'downvotes a question' do
+      #        sign_in(user)
+      #        visit question_path(question)
+      #
+      #        find('.question a.downvote-question-link').click
+      #        expect(page).to have_content 'Question has been successfully downvoted'
+      #      end
     end
 
     context 'question author' do

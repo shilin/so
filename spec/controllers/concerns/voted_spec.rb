@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 shared_examples 'voted' do
-
   model = controller_class.controller_path.singularize
 
   context 'author' do
@@ -16,7 +15,7 @@ shared_examples 'voted' do
 
       it 'renders error_json' do
         patch :upvote, id: voted, format: :json
-        error_json = assigns(:vote).errors.full_messages.to_json
+        error_json = { message: 'Unable to upvote' }.to_json
         expect(response.body).to eq error_json
         expect(response).to have_http_status :unprocessable_entity
       end
@@ -47,7 +46,6 @@ shared_examples 'voted' do
     let(:rating_json) { { rating: voted.rating }.to_json }
 
     context 'PATCH #upvote' do
-
       it 'does not upvotes the question' do
         voted
         expect { patch :upvote, id: voted, format: :json }.not_to change(voted, :rating)
