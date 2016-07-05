@@ -26,6 +26,14 @@ feature 'User upvotes and downvotes a question', %q(
         find('.question a.downvote-question-link').click
         expect(page).to have_content 'Question has been successfully downvoted'
       end
+
+      scenario 'call off the vote upon question' do
+        sign_in(user)
+        visit question_path(question)
+
+        find('.question a.unvote-question-link').click
+        expect(page).to have_content 'Question has been successfully unvoted'
+      end
     end
 
     context 'question author' do
@@ -36,7 +44,39 @@ feature 'User upvotes and downvotes a question', %q(
         expect(page).to_not have_css('a.upvote-question-link')
       end
 
-      scenario 'tries to downvote a question'
+      scenario 'tries to downvote a question' do
+        sign_in(author)
+        visit question_path(question)
+
+        expect(page).to_not have_css('a.downvote-question-link')
+      end
+
+      scenario 'tries to unvote a question' do
+        sign_in(author)
+        visit question_path(question)
+
+        expect(page).to_not have_css('a.unvote-question-link')
+      end
+    end
+
+    context 'guest' do
+      scenario 'tries to upvote a question' do
+        visit question_path(question)
+
+        expect(page).to_not have_css('a.upvote-question-link')
+      end
+
+      scenario 'tries to downvote a question' do
+        visit question_path(question)
+
+        expect(page).to_not have_css('a.downvote-question-link')
+      end
+
+      scenario 'tries to unvote a question' do
+        visit question_path(question)
+
+        expect(page).to_not have_css('a.unvote-question-link')
+      end
     end
   end
 end

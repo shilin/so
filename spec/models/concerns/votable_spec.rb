@@ -28,5 +28,11 @@ shared_examples_for 'votable' do
     end
   end
 
-  describe 'votable#unvote'
+  describe 'votable#unvote' do
+    it 'unvotes a votable' do
+      votable.upvote(user)
+      votable.unvote(user)
+      expect(votable.rating).to eq(0)
+    end
+  end
 end

@@ -41,6 +41,22 @@ binding = ->
       $('#flash').append(value + "</br>")
       console.log(value)
 
+  $('.unvote-question-link').on 'ajax:success', (e, data, status, xhr) ->
+    e.preventDefault()
+    response = $.parseJSON(xhr.responseText)
+    id = response.id
+    rating = response.rating
+    message = response.message
+    $('#question_' + id + ' #rating').html(rating)
+    $('#flash').html(message)
+
+  .on 'ajax:error', (e, xhr, status, error) ->
+    $('#flash').html('')
+    errors = $.parseJSON(xhr.responseText)
+    $.each errors, (index, value) ->
+      $('#flash').append(value + "</br>")
+      console.log(value)
+
 $(document).ready(binding) # "вешаем" функцию binding на событие document.ready
 
 $(document).ready(ready) # "вешаем" функцию ready на событие document.ready

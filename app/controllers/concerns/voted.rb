@@ -21,6 +21,14 @@ module Voted
     end
   end
 
+  def unvote
+    if @votable.unvote(current_user)
+      render json: { id: @votable.id, rating: @votable.rating, message: 'Question has been successfully unvoted' }, status: :ok
+    else
+      render json: { id: @votable.id, message: 'Unable to unvote' }, status: :unprocessable_entity
+    end
+  end
+
   def set_votable
     @votable = model_klass.find(params[:id])
   end

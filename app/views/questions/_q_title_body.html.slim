@@ -6,6 +6,7 @@
   - if current_user && (q_title_body.user_id != current_user.id)
     = link_to '+', upvote_question_path(q_title_body), method: :patch, remote: true, data: {type: :json}, class: 'upvote-question-link'
     = link_to '-', downvote_question_path(q_title_body), method: :patch, remote: true, data: {type: :json}, class: 'downvote-question-link'
+    = link_to 'call off the vote', unvote_question_path(q_title_body), method: :patch, remote: true, data: {type: :json}, class: 'unvote-question-link'
   p
     = q_title_body.body
   p

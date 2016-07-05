@@ -13,6 +13,10 @@ module Votable
     user && (user.id != user_id) && votes.where(user: user).first_or_initialize.update_attributes(state: -1)
   end
 
+  def unvote(user)
+    user && (user.id != user_id) && votes.where(user: user).first_or_initialize.update_attributes(state: 0)
+  end
+
   def rating
     votes.sum(:state)
   end
