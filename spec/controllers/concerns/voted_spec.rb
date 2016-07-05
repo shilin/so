@@ -14,9 +14,23 @@ shared_examples 'voted' do
       end
 
       it 'renders error_json' do
-        patch :upvote, id: voted, format: :json
-        error_json = { message: 'Unable to upvote' }.to_json
-        expect(response.body).to eq error_json
+        patch :upvote, id: voted.id, format: :json
+        up_error_json = { id: voted.id, message: 'Unable to upvote' }.to_json
+        expect(response.body).to eq up_error_json
+        expect(response).to have_http_status :unprocessable_entity
+      end
+    end
+
+    context 'PATCH #downvote' do
+      it 'does not downvote the voted' do
+        voted
+        expect { patch :downvote, id: voted, format: :json }.not_to change(voted, :rating)
+      end
+
+      it 'renders error_json' do
+        patch :downvote, id: voted, format: :json
+        down_error_json = { id: voted.id, message: 'Unable to downvote' }.to_json
+        expect(response.body).to eq down_error_json
         expect(response).to have_http_status :unprocessable_entity
       end
     end
@@ -25,17 +39,31 @@ shared_examples 'voted' do
   context 'authenticated non-author' do
     sign_in_user
     let!(:voted) { create(model, user: user) }
-    let(:rating_json) { { rating: voted.rating, message: "#{model.capitalize} has been successfully upvoted" }.to_json }
+    let(:up_rating_json) { { id: voted.id, rating: voted.rating, message: "#{model.capitalize} has been successfully upvoted" }.to_json }
+    let(:down_rating_json) { { id: voted.id, rating: voted.rating, message: "#{model.capitalize} has been successfully downvoted" }.to_json }
 
     context 'PATCH #upvote' do
       it 'upvotes the voted' do
         patch :upvote, id: voted, format: :json
-        expect(voted.rating).to eq 1
+        expect(voted.rating).to eq(1)
       end
 
       it 'renders rating_json with ok status' do
         patch :upvote, id: voted, format: :json
-        expect(response.body).to eq rating_json
+        expect(response.body).to eq up_rating_json
+        expect(response).to have_http_status :ok
+      end
+    end
+
+    context 'PATCH #downvote' do
+      it 'downvotes the voted' do
+        patch :downvote, id: voted, format: :json
+        expect(voted.rating).to eq(-1)
+      end
+
+      it 'renders rating_json with ok status' do
+        patch :downvote, id: voted, format: :json
+        expect(response.body).to eq down_rating_json
         expect(response).to have_http_status :ok
       end
     end
@@ -43,7 +71,6 @@ shared_examples 'voted' do
 
   context 'Not authenticated user' do
     let!(:voted) { create(model, user: user) }
-    let(:rating_json) { { rating: voted.rating }.to_json }
 
     context 'PATCH #upvote' do
       it 'does not upvotes the question' do
@@ -53,6 +80,18 @@ shared_examples 'voted' do
 
       it 'return unauthorized http status' do
         patch :upvote, id: voted, format: :json
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+
+    context 'PATCH #downvote' do
+      it 'does not downvotes the question' do
+        voted
+        expect { patch :downvote, id: voted, format: :json }.not_to change(voted, :rating)
+      end
+
+      it 'return unauthorized http status' do
+        patch :downvote, id: voted, format: :json
         expect(response).to have_http_status(:unauthorized)
       end
     end

@@ -6,7 +6,11 @@ module Votable
   end
 
   def upvote(user)
-    user && (user.id != self.user_id) && votes.create(user: user, state: 1)
+    user && (user.id != user_id) && votes.where(user: user).first_or_initialize.update_attributes(state: 1)
+  end
+
+  def downvote(user)
+    user && (user.id != user_id) && votes.where(user: user).first_or_initialize.update_attributes(state: -1)
   end
 
   def rating

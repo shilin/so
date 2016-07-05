@@ -7,9 +7,17 @@ module Voted
 
   def upvote
     if @votable.upvote(current_user)
-      render json: { rating: @votable.rating, message: 'Question has been successfully upvoted' }, status: :ok
+      render json: { id: @votable.id, rating: @votable.rating, message: 'Question has been successfully upvoted' }, status: :ok
     else
-      render json: { message: 'Unable to upvote' }, status: :unprocessable_entity
+      render json: { id: @votable.id, message: 'Unable to upvote' }, status: :unprocessable_entity
+    end
+  end
+
+  def downvote
+    if @votable.downvote(current_user)
+      render json: { id: @votable.id, rating: @votable.rating, message: 'Question has been successfully downvoted' }, status: :ok
+    else
+      render json: { id: @votable.id, message: 'Unable to downvote' }, status: :unprocessable_entity
     end
   end
 
