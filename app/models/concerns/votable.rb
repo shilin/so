@@ -14,7 +14,7 @@ module Votable
   end
 
   def unvote(user)
-    user && (user.id != user_id) && votes.where(user: user).first_or_initialize.update_attributes(state: 0)
+    user && (user.id != user_id) && (!votes.exists?(user: user) || votes.destroy_all)
   end
 
   def rating
