@@ -2,6 +2,8 @@
   li id="answer_block_#{answer.id}"
     = answer.body
 
+    div.rating
+      = answer.rating
     - answer.attachments.each do |a|
       = div_for a
         = link_to a.file.file.filename, a.file.url
@@ -13,6 +15,11 @@
       span
         = link_to 'Delete answer', answer, remote: true, method: :delete
         = link_to 'Edit answer', '', class: 'edit-answer-link', data: {answer_id: answer.id}
+
+    - if current_user && !current_user_author?(answer)
+      = link_to '+', upvote_answer_path(answer), method: :patch, remote: true, data: {type: :json}, class: 'upvote-answer-link'
+      = link_to '-', downvote_answer_path(answer), method: :patch, remote: true, data: {type: :json}, class: 'downvote-answer-link'
+      = link_to 'call off the vote', unvote_answer_path(answer), method: :patch, remote: true, data: {type: :json}, class: 'unvote-answer-link'
 
     - if current_user_author?(answer.question)
         = link_to 'Set as best answer', set_best_answer_path(answer, answer: {best: true}), method: :patch, remote: true, class: 'set-best-answer-link'

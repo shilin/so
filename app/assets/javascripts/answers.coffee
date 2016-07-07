@@ -11,6 +11,39 @@ ready = ->
     $('form#' + form_id).show()
     console.log(form_id)
 
+binding = ->
+  $('.upvote-answer-link').on 'ajax:success', (e, data, status, xhr) ->
+    render_success(e, data, status, xhr)
+  .on 'ajax:error', (e, xhr, status, error) ->
+    render_error(e, xhr, status, error)
+
+  $('.downvote-answer-link').on 'ajax:success', (e, data, status, xhr) ->
+    render_success(e, data, status, xhr)
+  .on 'ajax:error', (e, xhr, status, error) ->
+    render_error(e, xhr, status, error)
+
+  $('.unvote-answer-link').on 'ajax:success', (e, data, status, xhr) ->
+    render_success(e, data, status, xhr)
+  .on 'ajax:error', (e, xhr, status, error) ->
+    render_error(e, xhr, status, error)
+
+render_success = (e, data, status, xhr) ->
+    e.preventDefault()
+    response = $.parseJSON(xhr.responseText)
+    id = response.id
+    rating = response.rating
+    message = response.message
+    $('#answer_block_' + id + ' .rating').html(rating)
+    $('#flash').html(message)
+
+render_error = (e, xhr, status, error) ->
+    $('#flash').html('')
+    errors = $.parseJSON(xhr.responseText)
+    $.each errors, (index, value) ->
+      $('#flash').append(value + "</br>")
+      console.log(value)
+
+$(document).ready(binding) # "вешаем" функцию binding на событие document.ready
 
 $(document).ready(ready) # "вешаем" функцию ready на событие document.ready
 $(document).on('page:load', ready)  # "вешаем" функцию ready на событие page:load

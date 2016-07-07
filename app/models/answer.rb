@@ -1,4 +1,6 @@
 class Answer < ActiveRecord::Base
+  include Votable
+
   scope :best_first, -> { order(best: :desc, created_at: :asc) }
 
   has_many :attachments, as: :attachable, dependent: :destroy

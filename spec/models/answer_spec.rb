@@ -12,6 +12,8 @@ RSpec.describe Answer, type: :model do
   it { should validate_presence_of :question_id }
   it { should validate_presence_of :user_id }
 
+  it_behaves_like 'votable'
+
   it "ensures all question's answers made unbest" do
     answer1 = create(:answer, question: question, user: user, best: true)
     answer2 = create(:answer, question: question, user: user, best: false)

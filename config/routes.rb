@@ -17,8 +17,16 @@ Rails.application.routes.draw do
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
 
-  resources :questions, shallow: true do
-    resources :answers do
+  concern :votable do
+    member do
+      patch :upvote
+      patch :downvote
+      patch :unvote
+    end
+  end
+
+  resources :questions, concerns: :votable, shallow: true do
+    resources :answers, concerns: :votable do
       patch :set_best, on: :member
     end
   end

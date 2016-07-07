@@ -1,9 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
+  it_behaves_like 'voted'
+
   let(:invalid_question) { create(:invalid_question) }
   let(:author) { create(:user) }
   let(:user) { create(:user) }
+  let(:not_author) { create(:user) }
   let(:attachment) { create(:attachment) }
   let(:questions) { create_list(:question, 2, user_id: user.id, attachments: [attachment]) }
 
