@@ -7,6 +7,11 @@ ready = ->
     $(this).hide()
     $('form.edit_question').show()
 
+  $('.ask-question-link').click (e) ->
+    e.preventDefault()
+    $(this).hide()
+    $('form.new_question').show()
+
 
 binding = ->
   $('.upvote-question-link').on 'ajax:success', (e, data, status, xhr) ->

@@ -6,7 +6,6 @@ feature 'User can add files to his quesiton', %q(
   I want to be able to attach files to my question
 ) do
   given(:user) { create(:user) }
-  # given(:question) { create(:question, user: author) }
 
   scenario 'Authenticated user adds files when creating a question', js: true do
     sign_in(user)

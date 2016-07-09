@@ -1,3 +1,15 @@
-=render partial: 'q_title_body', collection: @questions
-p
-  = link_to 'Ask a new question', new_question_path
+div#questions_list
+  ul
+    = render partial: 'q_title_body', collection: @questions
+
+  - if user_signed_in?
+    p
+      = link_to 'Ask a new question', '#', class: 'ask-question-link'
+
+- if user_signed_in?
+  div.validation_errors
+  = form_for @question, remote: true do |f|
+    = render 'question_fields', question: @question, f: f
+    = f.submit 'Save'
+
+= subscribe_to "/questions"

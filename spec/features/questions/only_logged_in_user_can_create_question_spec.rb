@@ -9,7 +9,7 @@ feature 'User creates question', %q(
   given(:invalid_question) { build(:invalid_question) }
   given(:user) { create(:user) }
 
-  context 'Authenticated user' do
+  context 'Authenticated user', js: true do
     background { sign_in(user) }
 
     scenario 'creates a question' do
@@ -34,11 +34,10 @@ feature 'User creates question', %q(
     end
   end
 
-  context 'Not authenticated user' do
+  context 'Not authenticated user', js: true do
     scenario 'tries to create a question' do
       visit questions_path
-      click_on 'Ask a new question'
-      expect(page).to have_content 'You need to sign in or sign up before continuing.'
+      expect(page).to_not have_content 'Ask a new question'
     end
   end
 end

@@ -6,6 +6,7 @@ class QuestionsController < ApplicationController
 
   def index
     @questions = Question.all
+    (@question = Question.new).attachments.build if current_user
   end
 
   def show
@@ -13,23 +14,12 @@ class QuestionsController < ApplicationController
     @answer.attachments.build
   end
 
-  def new
-    @question = Question.new
-    @question.attachments.build
-  end
-
-  def edit
-    redirect_to @question if current_user && current_user.id != @question.user.id
-  end
-
   def create
     @question = Question.new(question_params.merge(user: current_user))
     if @question.save
       flash[:notice] = 'Your question has been successfully created!'
-      redirect_to @question
     else
       flash[:alert] = 'Error creating your question!'
-      render :new
     end
   end
 

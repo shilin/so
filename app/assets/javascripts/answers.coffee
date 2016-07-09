@@ -9,7 +9,6 @@ ready = ->
     answer_id = $(this).data('answerId')
     form_id = 'edit_answer_' + answer_id
     $('form#' + form_id).show()
-    console.log(form_id)
 
 binding = ->
   $('.upvote-answer-link').on 'ajax:success', (e, data, status, xhr) ->
