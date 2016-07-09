@@ -5,8 +5,11 @@
 <% end %>
 
   <% else %>
+
+    <% publish_to "/questions/#{@question.id}/answers" do %>
       $('#answers_list ul').append('<%= j render "shared/answer", answer: @answer %>')
-    $('#answer_body').val('')
+      $('.new_answer #answer_body').val('')
+    <% end %>
 <% end %>
 
 
