@@ -70,6 +70,13 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:answer).question_id).to eq question.id
     end
 
+    it 'assigns empty comment as @comment for the question' do
+      expect(assigns(:comment)).to be_a_new(Comment)
+
+      expect(assigns(:comment).commentable_id).to eq question.id
+      expect(assigns(:comment).commentable_type).to eq 'Question'
+    end
+
     it 'builds new empty attachment for new empty answer' do
       expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
     end

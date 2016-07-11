@@ -1,0 +1,23 @@
+<% if @comment.errors.present? %>
+
+<% @comment.errors.full_messages.each do |message| %>
+    $('.validation_errors').append('<%= message %>')
+<% end %>
+
+  <% else %>
+
+      <%  form_id = "#{@commentable.class.name.downcase}_form_#{@commentable.id}" %>
+      <%  link_id = "add-comment-link-#{@commentable.class.name.downcase}_#{@commentable.id}" %>
+      $('form#<%= form_id %>').hide()
+      $('form#<%= form_id %> #comment_body').val('')
+      $('.add-comment-link#<%= link_id %>').show()
+
+      <% publish_to polymorphic_path([@commentable,:comments]) do %>
+      $('#question_comments_list ul').append('<%= j render "shared/comment", comment: @comment %>')
+    <% end %>
+<% end %>
+
+$('#flash').html('<%= j render "shared/flash" %>')
+
+
+

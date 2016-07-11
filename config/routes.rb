@@ -26,9 +26,12 @@ Rails.application.routes.draw do
   end
 
   resources :questions, concerns: :votable, shallow: true do
-    resources :answers, concerns: :votable do
+    resources :answers, concerns: :votable, shallow: true do
+      resources :comments
       patch :set_best, on: :member
     end
+
+    resources :comments
   end
 
   # Example resource route with options:
