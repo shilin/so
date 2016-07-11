@@ -35,16 +35,16 @@ feature 'Only author can choose the best answer for his question', %q(
       expect(page).to have_content 'Set as best answer'
     end
 
-    first_answer_id = find('#answers_list ul li:first-child')[:id]
+    first_answer_id = page.find(:xpath, "//*[@id='answers_list']/ul/li[1]")[:id]
 
     expect(first_answer_id).to_not eq answers.second.id
 
     within("#answer_block_#{answers.second.id}") do
       click_on 'Set as best answer'
     end
-
     sleep 1
-    first_answer_id_reordered = page.find('#answers_list ul li:first-child')[:id]
+
+    first_answer_id_reordered = page.find(:xpath, "//*[@id='answers_list']/ul/li[1]")[:id]
 
     expect(page).to have_content 'Answer has been successfully set as best'
     expect(first_answer_id_reordered).to eq "answer_block_#{answers.second.id}"

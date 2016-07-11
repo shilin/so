@@ -23,5 +23,5 @@
     = render 'shared/answer_fields', f: f
     = f.submit 'Save'
 
-= subscribe_to "/questions/#{@question.id}/answers"
 = subscribe_to "/questions/#{@question.id}/comments"
+= subscribe_to "/questions/#{@question.id}/answers"
