@@ -18,8 +18,6 @@
           <%   channel_prefix =  @commentable %>
       <% end %>
 
-      <% pp polymorphic_path([channel_prefix,:comments]) %>
-
         <% publish_to polymorphic_path([channel_prefix,:comments]) do %>
           $('#<%= @commentable.class.name.downcase %>_comments_list ul').append('<%= j render "shared/comment", comment: @comment %>')
         <% end %>

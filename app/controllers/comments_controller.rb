@@ -24,10 +24,10 @@ class CommentsController < ApplicationController
   end
 
   def model_klass
-    request.fullpath.split('/')[1].classify.constantize
+    params[:commentable].classify.constantize
   end
 
   def model_id
-    request.fullpath.split('/')[2]
+    params["#{model_klass.name.downcase}_id"]
   end
 end

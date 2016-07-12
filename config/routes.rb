@@ -26,12 +26,12 @@ Rails.application.routes.draw do
   end
 
   resources :questions, concerns: :votable, shallow: true do
+    resources :comments, defaults: { commentable: 'questions' }
+
     resources :answers, concerns: :votable, shallow: true do
-      resources :comments
+      resources :comments, defaults: { commentable: 'answers' }
       patch :set_best, on: :member
     end
-
-    resources :comments
   end
 
   # Example resource route with options:

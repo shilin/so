@@ -16,6 +16,7 @@ RSpec.describe CommentsController, type: :controller do
             post :create,
                  comment: attributes_for(:comment),
                  question_id: question.id,
+                 commentable: 'questions',
                  format: :js
           end
             .to change(question.comments, :count).by(1)
@@ -25,6 +26,7 @@ RSpec.describe CommentsController, type: :controller do
           post(:create,
                comment: attributes_for(:comment),
                question_id: question.id,
+               commentable: 'questions',
                format: :js)
 
           expect(response).to render_template 'create'
@@ -37,6 +39,7 @@ RSpec.describe CommentsController, type: :controller do
             post :create,
                  comment: attributes_for(:invalid_comment),
                  question_id: question,
+                 commentable: 'questions',
                  format: :js
           end
             .to_not change(Comment, :count)
@@ -50,6 +53,7 @@ RSpec.describe CommentsController, type: :controller do
           post :create,
                comment: attributes_for(:invalid_comment),
                question_id: question,
+               commentable: 'questions',
                format: :js
         end
           .to_not change(Comment, :count)
@@ -59,6 +63,7 @@ RSpec.describe CommentsController, type: :controller do
         post(:create,
              comment: attributes_for(:invalid_comment),
              question_id: question.id,
+             commentable: 'questions',
              format: :js)
 
         expect(response).to have_http_status(:unauthorized)
@@ -75,6 +80,7 @@ RSpec.describe CommentsController, type: :controller do
             post :create,
                  comment: attributes_for(:comment),
                  answer_id: answer.id,
+                 commentable: 'answers',
                  format: :js
           end
             .to change(answer.comments, :count).by(1)
@@ -84,6 +90,7 @@ RSpec.describe CommentsController, type: :controller do
           post(:create,
                comment: attributes_for(:comment),
                answer_id: answer.id,
+               commentable: 'answers',
                format: :js)
 
           expect(response).to render_template 'create'
@@ -96,6 +103,7 @@ RSpec.describe CommentsController, type: :controller do
             post :create,
                  comment: attributes_for(:invalid_comment),
                  answer_id: answer,
+                 commentable: 'answers',
                  format: :js
           end
             .to_not change(Comment, :count)
@@ -109,6 +117,7 @@ RSpec.describe CommentsController, type: :controller do
           post :create,
                comment: attributes_for(:invalid_comment),
                answer_id: answer,
+               commentable: 'answers',
                format: :js
         end
           .to_not change(Comment, :count)
@@ -118,6 +127,7 @@ RSpec.describe CommentsController, type: :controller do
         post(:create,
              comment: attributes_for(:invalid_comment),
              answer_id: answer.id,
+             commentable: 'answers',
              format: :js)
 
         expect(response).to have_http_status(:unauthorized)
