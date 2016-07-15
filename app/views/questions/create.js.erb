@@ -6,11 +6,15 @@
 
   <% else %>
 
-    <% publish_to '/questions' do %>
-      $('#questions_list ul').append('<%= j render "q_title_body", q_title_body: @question %>')
-      $('.new_question #answer_body').val('')
+      <% publish_to '/questions' do %>
+        $('#questions_list ul').append('<%= j render "q_title_body_push", q_title_body: @question %>')
+        $('.new_question #answer_body').val('');
+        if (gon.currentUserId != <%= @question.user_id %>) {
+          $('.delete-question-link').hide();
+          $('.edit-question-link').hide();
+        }
+      <% end %>
     <% end %>
-<% end %>
 
 $('#flash').html('<%= j render "shared/flash" %>')
 

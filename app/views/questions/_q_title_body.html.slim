@@ -18,6 +18,6 @@ li class='question' id="question_#{q_title_body.id}"
             question: {attachments_attributes: {id: a, _destroy: true}}), remote: true, method: :patch
 
   - if current_user_author?(q_title_body)
-    p= link_to 'Delete', question_path(q_title_body), method: 'delete'
+    p= link_to 'Delete', question_path(q_title_body), method: 'delete', class: 'delete-question-link'
     p= link_to 'Edit', '#', class: 'edit-question-link'
     <br/>

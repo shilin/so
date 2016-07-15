@@ -5,11 +5,13 @@ class QuestionsController < ApplicationController
   before_action :load_question, except: [:new, :index, :create]
 
   def index
+    gon.currentUserId = (current_user && current_user.id) || false
     @questions = Question.all
     (@question = Question.new).attachments.build if current_user
   end
 
   def show
+    gon.currentUserId = (current_user && current_user.id) || false
     @comment = @question.comments.build
 
     @answer = @question.answers.build

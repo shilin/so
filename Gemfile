@@ -41,6 +41,9 @@ gem 'remotipart'
 gem 'cocoon'
 gem 'private_pub'
 gem 'thin'
+#gem 'mustache'
+gem 'gon'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

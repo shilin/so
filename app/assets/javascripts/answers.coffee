@@ -45,6 +45,9 @@ render_error = (e, xhr, status, error) ->
 $(document).ready(binding) # "вешаем" функцию binding на событие document.ready
 
 $(document).ready(ready) # "вешаем" функцию ready на событие document.ready
+
+$(document).on('page:load', binding)  # "вешаем" функцию ready на событие page:load
+$(document).on('page:update', binding) # "вешаем" функцию ready на событие page:update
 $(document).on('page:load', ready)  # "вешаем" функцию ready на событие page:load
 $(document).on('page:update', ready) # "вешаем" функцию ready на событие page:update
 
