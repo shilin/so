@@ -17,6 +17,7 @@ feature 'Only author is able to edit answer', %q(
 
     within("#answer_block_#{answer.id}") do
       click_on 'Edit answer'
+      sleep 4
       fill_in :answer_body, with: 'edited_answer'
       click_on 'Save'
 

@@ -9,24 +9,39 @@
         = link_to a.file.file.filename, a.file.url
         - if current_user_author?(answer)
           = link_to 'Remove file', answer_path(answer,
-            answer: {attachments_attributes: {id: a, _destroy: true}}), remote: true, method: :patch
+            answer: {attachments_attributes: {id: a, _destroy: true}}), remote: true, method: :patch, class: 'answer-author-only'
 
     - if current_user_author?(answer)
       span
-        = link_to 'Delete answer', answer, remote: true, method: :delete
-        = link_to 'Edit answer', '', class: 'edit-answer-link', data: {answer_id: answer.id}
+        = link_to 'Delete answer', answer, remote: true, method: :delete, class: 'answer-author-only'
+        = link_to 'Edit answer', '', class: ['edit-answer-link', 'answer-author-only'], data: {answer_id: answer.id}
+
+      = form_for answer, remote: true, html: {class: 'hidden'} do |f|
+        = render 'shared/answer_body_fields', f: f
+        <br/>
+        = f.submit 'Save answer'
 
     - if current_user && !current_user_author?(answer)
-      = link_to '+', upvote_answer_path(answer), method: :patch, remote: true, data: {type: :json}, class: 'upvote-answer-link'
-      = link_to '-', downvote_answer_path(answer), method: :patch, remote: true, data: {type: :json}, class: 'downvote-answer-link'
-      = link_to 'call off the vote', unvote_answer_path(answer), method: :patch, remote: true, data: {type: :json}, class: 'unvote-answer-link'
+      = link_to '+', upvote_answer_path(answer), method: :patch, remote: true, data: {type: :json}, class: ['upvote-answer-link', 'not-answer-author-only']
+      = link_to '-', downvote_answer_path(answer), method: :patch, remote: true, data: {type: :json}, class: ['downvote-answer-link', 'not-answer-author-only']
+      = link_to 'call off the vote', unvote_answer_path(answer), method: :patch, remote: true, data: {type: :json}, class: ['unvote-answer-link', 'not-answer-author-only']
+
 
     - if current_user_author?(answer.question)
-        = link_to 'Set as best answer', set_best_answer_path(answer, answer: {best: true}), method: :patch, remote: true, class: 'set-best-answer-link'
+      = link_to 'Set as best answer', set_best_answer_path(answer, answer: {best: true}), method: :patch, remote: true, class: ['set-best-answer-link', 'question-author-only']
 
-        = form_for answer, remote: true, html: {class: 'hidden'} do |f|
-          = render 'shared/answer_body_fields', f: f
-          <br/>
-          = f.submit 'Save answer'
+    #answer_comments_list
+      ul
+        = render partial: 'shared/comment', collection: answer.comments.order_by_create
+
+    - if current_user
+      div.answer-comment-link
+        = link_to 'Add a comment', '', class: 'add-comment-link', id: "add-comment-link-answer_#{answer.id}", data: {related_form_id: "answer_form_#{answer.id}" }
+
+      = render 'shared/comment_form', commentable: answer
+
+
+
+
 
 

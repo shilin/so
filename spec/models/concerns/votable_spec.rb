@@ -31,11 +31,7 @@ shared_examples_for 'votable' do
   describe 'votable#unvote' do
     it 'unvotes a votable' do
       votable.upvote(user)
-      puts votable.rating
-      sleep 1
       votable.unvote(user)
-      puts votable.rating
-      sleep 1
       expect(votable.rating).to eq(0)
     end
   end

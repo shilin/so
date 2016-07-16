@@ -11,14 +11,45 @@ RSpec.describe QuestionsController, type: :controller do
   let(:questions) { create_list(:question, 2, user_id: user.id, attachments: [attachment]) }
 
   describe 'GET #index' do
-    before { get :index }
+    context 'Not authenticated user' do
+      it 'does not assigns new empty question to @question' do
+        get :index
+        expect(assigns(:question)).to be_nil
+      end
 
-    it 'populates an array of all questions' do
-      expect(assigns(:questions)).to match_array(questions)
+      it 'populates an array of all questions' do
+        get :index
+        expect(assigns(:questions)).to match_array(questions)
+      end
+
+      it 'renders index view' do
+        get :index
+        expect(response).to render_template :index
+      end
     end
 
-    it 'renders index view' do
-      expect(response).to render_template :index
+    context 'authenticated user' do
+      sign_in_user
+
+      it 'assigns new empty question to @question' do
+        get :index
+        expect(assigns(:question)).to be_a_new(Question)
+      end
+
+      it 'builds new attachment into attachments collection' do
+        get :index
+        expect(assigns(:question).attachments.first).to be_a_new(Attachment)
+      end
+
+      it 'populates an array of all questions' do
+        get :index
+        expect(assigns(:questions)).to match_array(questions)
+      end
+
+      it 'renders index view' do
+        get :index
+        expect(response).to render_template :index
+      end
     end
   end
 
@@ -39,82 +70,15 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:answer).question_id).to eq question.id
     end
 
+    it 'assigns empty comment as @comment for the question' do
+      expect(assigns(:comment)).to be_a_new(Comment)
+
+      expect(assigns(:comment).commentable_id).to eq question.id
+      expect(assigns(:comment).commentable_type).to eq 'Question'
+    end
+
     it 'builds new empty attachment for new empty answer' do
       expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
-    end
-  end
-
-  describe 'GET #new' do
-    context 'Not authenticated user' do
-      before { get :new }
-      it 'does not create new question' do
-        expect(assigns(:question)).to be_nil
-      end
-
-      it 'redirects to sign_in view' do
-        expect(response).to redirect_to new_user_session_path
-      end
-    end
-
-    context 'authenticated user' do
-      sign_in_user
-      before { get :new }
-
-      it 'creates new question and assigns it to @question' do
-        expect(assigns(:question)).to be_a_new(Question)
-      end
-
-      it 'builds new attachment into @attachments collection' do
-        expect(assigns(:question).attachments.first).to be_a_new(Attachment)
-      end
-
-      it 'renders new template' do
-        expect(response).to render_template :new
-      end
-    end
-  end
-
-  describe 'GET #edit' do
-    context 'Not authenticated user' do
-      let(:question) { create(:question, user: user) }
-
-      before { get :edit, id: question }
-
-      it 'does not assign the requested question to @question' do
-        expect(assigns(:question)).to be_nil
-      end
-
-      it 'redirects to sign in view' do
-        expect(response).to redirect_to new_user_session_path
-      end
-    end
-
-    context 'Authenticated user' do
-      sign_in_user
-      let(:question) { create(:question, user: author) }
-      before { get :edit, id: question }
-
-      it 'does not assign the requested question to @question' do
-        expect(assigns(:question)).to eq question
-      end
-
-      it 'redirects to show view' do
-        expect(response).to redirect_to question_path(assigns(:question))
-      end
-    end
-
-    context 'Author' do
-      sign_in_user
-      let(:question) { create(:question, user: @user) }
-      before { get :edit, id: question }
-
-      it 'assigns the requested question to @question' do
-        expect(assigns(:question)).to eq question
-      end
-
-      it 'renders edit template' do
-        expect(response).to render_template :edit
-      end
     end
   end
 
@@ -216,29 +180,30 @@ RSpec.describe QuestionsController, type: :controller do
       let(:question) { create(:question, user: @user) }
       context 'with valid attributes' do
         it 'creates new question that belongs to current user and saves it into DB' do
-          expect { post :create, question: attributes_for(:question) }.to change(@user.questions, :count).by(1)
+          expect { post :create, question: attributes_for(:question), format: :js }.to change(@user.questions, :count).by(1)
         end
 
-        it 'redirects to show view' do
-          post :create, question: attributes_for(:question)
-          expect(response).to redirect_to question_path(assigns(:question))
+        it 'renders create view' do
+          post :create, question: attributes_for(:question), format: :js
+          expect(response).to render_template :create
         end
       end
 
       context 'with invalid attributes' do
         it 'does not save question into DB' do
-          expect { post :create, question: attributes_for(:invalid_question) }.to_not change(Question, :count)
+          expect { post :create, question: attributes_for(:invalid_question), format: :js }.to_not change(Question, :count)
         end
-        it 're-renders new view' do
-          post :create, question: attributes_for(:invalid_question)
-          expect(response).to render_template :new
+
+        it 'renders create view' do
+          post :create, question: attributes_for(:question), format: :js
+          expect(response).to render_template :create
         end
       end
     end
 
     context 'not authenticated user with valid attributes' do
       it 'does not save question into DB' do
-        expect { post :create, question: attributes_for(:question) }.to_not change(Question, :count)
+        expect { post :create, question: attributes_for(:question), format: :js }.to_not change(Question, :count)
       end
       it 'redirects to sign in view' do
         post :create, question: attributes_for(:question)

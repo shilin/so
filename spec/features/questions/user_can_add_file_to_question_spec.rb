@@ -7,7 +7,7 @@ feature 'User can add files to his question', %q(
 ) do
   given(:user) { create(:user) }
 
-  scenario 'Authenticated user adds file when asking question' do
+  scenario 'Authenticated user adds file when asking question', js: true do
     sign_in(user)
     visit questions_path
     click_on 'Ask a new question'

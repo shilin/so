@@ -1,5 +1,6 @@
 class Answer < ActiveRecord::Base
   include Votable
+  include Commentable
 
   scope :best_first, -> { order(best: :desc, created_at: :asc) }
 

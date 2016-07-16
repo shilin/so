@@ -25,25 +25,43 @@ RSpec.describe AnswersController, type: :controller do
         end
 
         it 'renders show create view for answer' do
-          post :create, answer: attributes_for(:answer), question_id: question, format: :js
+          post :create,
+               answer: attributes_for(:answer),
+               question_id: question,
+               format: :js
+
           expect(response).to render_template 'create'
         end
       end
 
       context 'with invalid attributes' do
         it 'does not save answer to DB' do
-          expect { post :create, answer: attributes_for(:invalid_answer), question_id: question, format: :js }.to_not change(Answer, :count)
+          expect do
+            post :create,
+                 answer: attributes_for(:invalid_answer),
+                 question_id: question,
+                 format: :js
+          end
+            .to_not change(Answer, :count)
         end
       end
     end
 
     context 'Not authenticated user' do
       it 'does not save an answer to DB' do
-        expect { post :create, answer: attributes_for(:answer), question_id: question }.not_to change(Answer, :count)
+        expect do
+          post :create,
+               answer: attributes_for(:answer),
+               question_id: question
+        end
+          .not_to change(Answer, :count)
       end
 
       it 'redirects to sign in view' do
-        post :create, answer: attributes_for(:answer), question_id: question
+        post :create,
+             answer: attributes_for(:answer),
+             question_id: question
+
         expect(response).to redirect_to new_user_session_path
       end
     end
@@ -55,7 +73,12 @@ RSpec.describe AnswersController, type: :controller do
     context 'Not authenticated user' do
       it 'does not delete answer from DB' do
         answer
-        expect { delete :destroy, id: answer.id, format: :js }.to_not change(Answer, :count)
+        expect do
+          delete :destroy,
+                 id: answer.id,
+                 format: :js
+        end
+          .to_not change(Answer, :count)
       end
 
       it 'return unauthorized http status' do
@@ -68,7 +91,12 @@ RSpec.describe AnswersController, type: :controller do
       sign_in_user
       it 'does not delete answer from DB' do
         answer
-        expect { delete :destroy, id: answer, format: :js }.to_not change(Answer, :count)
+        expect do
+          delete :destroy,
+                 id: answer,
+                 format: :js
+        end
+          .to_not change(Answer, :count)
       end
 
       it 'renders destroy js view' do
@@ -82,7 +110,12 @@ RSpec.describe AnswersController, type: :controller do
       let(:answer) { create(:answer, question: question, user: @user) }
       it 'deletes answer from DB' do
         answer
-        expect { delete :destroy, id: answer, format: :js }.to change(Answer, :count).by(-1)
+        expect do
+          delete :destroy,
+                 id: answer,
+                 format: :js
+        end
+          .to change(Answer, :count).by(-1)
       end
 
       it 'return ok http status' do

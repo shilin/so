@@ -1,0 +1,4 @@
+= form_for [commentable, commentable.comments.build], remote: true, html: {class: "hidden", id: "#{commentable.class.name.downcase}_form_#{commentable.id}"} do |f|
+  = render 'shared/comment_fields', f: f
+  = f.submit 'Save'
+

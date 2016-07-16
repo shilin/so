@@ -7,6 +7,11 @@ ready = ->
     $(this).hide()
     $('form.edit_question').show()
 
+  $('.ask-question-link').click (e) ->
+    e.preventDefault()
+    $(this).hide()
+    $('form.new_question').show()
+
 
 binding = ->
   $('.upvote-question-link').on 'ajax:success', (e, data, status, xhr) ->
@@ -44,6 +49,11 @@ render_error = (e, xhr, status, error) ->
 $(document).ready(binding) # "вешаем" функцию binding на событие document.ready
 
 $(document).ready(ready) # "вешаем" функцию ready на событие document.ready
+
+
+$(document).on('page:load', binding)  # "вешаем" функцию ready на событие page:load
+$(document).on('page:update', binding) # "вешаем" функцию ready на событие page:update
 $(document).on('page:load', ready)  # "вешаем" функцию ready на событие page:load
 $(document).on('page:update', ready) # "вешаем" функцию ready на событие page:update
+
 

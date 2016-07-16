@@ -9,7 +9,6 @@ ready = ->
     answer_id = $(this).data('answerId')
     form_id = 'edit_answer_' + answer_id
     $('form#' + form_id).show()
-    console.log(form_id)
 
 binding = ->
   $('.upvote-answer-link').on 'ajax:success', (e, data, status, xhr) ->
@@ -46,6 +45,9 @@ render_error = (e, xhr, status, error) ->
 $(document).ready(binding) # "вешаем" функцию binding на событие document.ready
 
 $(document).ready(ready) # "вешаем" функцию ready на событие document.ready
+
+$(document).on('page:load', binding)  # "вешаем" функцию ready на событие page:load
+$(document).on('page:update', binding) # "вешаем" функцию ready на событие page:update
 $(document).on('page:load', ready)  # "вешаем" функцию ready на событие page:load
 $(document).on('page:update', ready) # "вешаем" функцию ready на событие page:update
 
