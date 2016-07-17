@@ -24,7 +24,7 @@ feature 'User can comment a question', %q(
         click_on 'Save'
       end
 
-      expect(page).to have_content 'Your comment has been submitted!'
+      expect(page).to have_content 'Comment was successfully created.'
       expect(page).to have_content 'My good comment'
     end
 
@@ -39,7 +39,7 @@ feature 'User can comment a question', %q(
         fill_in 'comment_body', with:  nil
         click_on 'Save'
       end
-      expect(page).to have_content 'Unable to submit your comment'
+      expect(page).to have_content 'Comment could not be created.'
     end
   end
 

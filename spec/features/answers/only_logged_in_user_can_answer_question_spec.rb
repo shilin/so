@@ -18,7 +18,7 @@ feature 'User can answer a question', %q(
       click_on 'Save'
 
       expect(current_path).to eq question_path(question)
-      expect(page).to have_content 'Your answer has been submitted!'
+      expect(page).to have_content 'Answer was successfully created'
       within('#answers_list') do
         expect(page).to have_content 'MyAnswer'
       end
@@ -31,7 +31,7 @@ feature 'User can answer a question', %q(
       click_on 'Save'
 
       expect(current_path).to eq question_path(question)
-      expect(page).to have_content 'Unable to submit your answer'
+      expect(page).to have_content 'Answer could not be created'
       expect(page).to have_content "Body can't be blank"
       expect(page).to_not have_content 'MyAnswer'
     end

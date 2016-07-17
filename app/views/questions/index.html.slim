@@ -8,8 +8,8 @@ div#questions_list
 
 - if user_signed_in?
   div.validation_errors
-  = form_for @question, remote: true do |f|
-    = render 'question_fields', question: @question, f: f
+  = form_for (question = Question.new), remote: true do |f|
+    = render 'question_fields', question: question, f: f
     = f.submit 'Save'
 
 = subscribe_to "/questions"

@@ -1,7 +1,7 @@
 = render 'shared/answer_body_fields', f: f
 
 #attachments
-  = f.fields_for :attachments do |attachment|
+  = f.fields_for :attachments, answer.attachments.build do |attachment|
     = render 'shared/attachment_fields', f: attachment
   .links
     = link_to_add_association 'add file', f, :attachments, partial: 'shared/attachment_fields'

@@ -15,7 +15,7 @@ feature 'Only author is able to delete a question', %q(
     visit question_path(question)
     click_on 'Delete'
 
-    expect(page).to have_content 'Question has been successfully deleted'
+    expect(page).to have_content 'Question was successfully destroyed'
     expect(page).not_to have_content question.title
     expect(current_path).to eq questions_path
   end

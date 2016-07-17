@@ -43,6 +43,7 @@ gem 'private_pub'
 gem 'thin'
 #gem 'mustache'
 gem 'gon'
+gem 'responders'
 
 
 group :development, :test do

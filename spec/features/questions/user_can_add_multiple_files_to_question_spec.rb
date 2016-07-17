@@ -29,7 +29,7 @@ feature 'User can add files to his quesiton', %q(
 
     click_on 'Save'
 
-    expect(page).to have_content 'Your question has been successfully created!'
+    expect(page).to have_content 'Question was successfully created.'
 
     expect(page).to have_link 'spec_helper.rb'
     expect(page).to have_link 'rails_helper.rb'

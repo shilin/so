@@ -3,47 +3,30 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, except: [:new, :index, :create]
+  before_action :check_authorship, only: [:destroy, :update]
+  before_action :gon_current_user, only: [:show, :index]
+
+  respond_to :json, :js
 
   def index
-    gon.currentUserId = (current_user && current_user.id) || false
-    @questions = Question.all
-    (@question = Question.new).attachments.build if current_user
+    respond_with(@questions = Question.all)
   end
 
   def show
-    gon.currentUserId = (current_user && current_user.id) || false
-    @comment = @question.comments.build
-
-    @answer = @question.answers.build
-    @answer.attachments.build
-    @answer.comments.build
+    respond_with(@question)
   end
 
   def create
-    @question = Question.new(question_params.merge(user: current_user))
-    if @question.save
-      flash[:notice] = 'Your question has been successfully created!'
-    else
-      flash[:alert] = 'Error creating your question!'
-    end
+    respond_with(@question = Question.create(question_params.merge(user: current_user)))
   end
 
   def destroy
-    if current_user && current_user.id == @question.user.id && @question.destroy
-      flash[:notice] = 'Question has been successfully deleted'
-      redirect_to questions_path
-    else
-      flash[:error] = 'You are not permitted to delete the question'
-      redirect_to question_path(@question)
-    end
+    respond_with(@question.destroy)
   end
 
   def update
-    if current_user && (current_user.id == @question.user.id) && @question.update_attributes(question_params)
-      flash[:notice] = 'Question has been successfully updated'
-    else
-      flash[:error] = 'Unable to update question'
-    end
+    @question.update_attributes(question_params)
+    respond_with(@question)
   end
 
   private
@@ -54,5 +37,18 @@ class QuestionsController < ApplicationController
 
   def load_question
     @question = Question.find(params[:id])
+  end
+
+  def check_authorship
+    return if author
+    render status: :forbidden, text: 'Only author is allowed to perform this action'
+  end
+
+  def author
+    current_user && (current_user.id == @question.user_id)
+  end
+
+  def gon_current_user
+    gon.currentUserId = (current_user && current_user.id)
   end
 end
