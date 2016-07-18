@@ -99,9 +99,9 @@ RSpec.describe AnswersController, type: :controller do
           .to_not change(Answer, :count)
       end
 
-      it 'renders destroy js view' do
+      it 'renders forbidden status' do
         delete :destroy, id: answer, format: :js
-        expect(response).to render_template :destroy
+        expect(response).to be_forbidden
       end
     end
 
@@ -182,9 +182,9 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.body).to_not eq 'edited_answer'
       end
 
-      it 'renders update js view' do
+      it 'returns forbidden state' do
         patch :update, id: answer, answer: { body: 'edited_answer' }, format: :js
-        expect(response).to render_template :update
+        expect(response).to be_forbidden
       end
     end
 

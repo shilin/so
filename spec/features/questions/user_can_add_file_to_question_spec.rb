@@ -17,7 +17,7 @@ feature 'User can add files to his question', %q(
     attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
     click_on 'Save'
 
-    expect(page).to have_content 'Your question has been successfully created!'
+    expect(page).to have_content 'Question was successfully created.'
     expect(page).to have_link 'rails_helper.rb'
   end
 end

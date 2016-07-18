@@ -5,12 +5,7 @@ class CommentsController < ApplicationController
   respond_to :js
 
   def create
-    @comment = @commentable.comments.build(comment_params.merge(user: current_user))
-    if @comment.save
-      flash.now[:notice] = 'Your comment has been submitted!'
-    else
-      flash.now[:alert] = 'Unable to submit your comment'
-    end
+    respond_with(@comment = @commentable.comments.create(comment_params.merge(user: current_user)))
   end
 
   private

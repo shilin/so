@@ -35,7 +35,7 @@ feature 'Only author is able to delete answer', %q(
       click_on 'Delete answer'
     end
 
-    expect(page).to have_content 'Answer has been successfully deleted'
+    expect(page).to have_content 'Answer was successfully destroyed'
     expect(page).not_to have_content answer.body
   end
 end

@@ -25,7 +25,7 @@ feature 'Author can edit question', %q(
       expect(page).to have_content('edited_question')
     end
 
-    expect(page).to have_content('Question has been successfully updated')
+    expect(page).to have_content('Question was successfully updated.')
   end
 
   scenario 'Authenticated user tries to edit not his question' do

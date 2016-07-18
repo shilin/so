@@ -26,7 +26,7 @@ feature 'User can comment an answer', %q(
       end
       expect(page).to have_content 'My good comment for an answer'
 
-      expect(page).to have_content 'Your comment has been submitted!'
+      expect(page).to have_content 'Comment was successfully created.'
     end
 
     scenario 'tries to create an invalid comment', driver: :selenium, js: true do
@@ -40,7 +40,7 @@ feature 'User can comment an answer', %q(
         fill_in 'comment_body', with:  nil
         click_on 'Save'
       end
-      expect(page).to have_content 'Unable to submit your comment'
+      expect(page).to have_content 'Comment could not be created.'
     end
   end
 

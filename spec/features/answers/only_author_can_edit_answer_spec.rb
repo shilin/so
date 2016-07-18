@@ -24,7 +24,7 @@ feature 'Only author is able to edit answer', %q(
       expect(page).to have_content('edited_answer')
     end
 
-    expect(page).to have_content('Answer has been successfully updated')
+    expect(page).to have_content('Answer was successfully updated')
   end
 
   scenario 'Authenticated user tries to edit not his question' do

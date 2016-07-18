@@ -19,8 +19,8 @@
   = render 'shared/comment_form', commentable: @question
 
   #validation_errors
-  = form_for [@question, @answer], remote: true do |f|
-    = render 'shared/answer_fields', f: f
+  = form_for [@question, answer = @question.answers.build], remote: true do |f|
+    = render 'shared/answer_fields', answer: answer, f: f
     = f.submit 'Save'
 
 = subscribe_to "/questions/#{@question.id}/comments"

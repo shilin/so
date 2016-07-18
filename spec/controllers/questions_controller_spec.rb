@@ -31,16 +31,6 @@ RSpec.describe QuestionsController, type: :controller do
     context 'authenticated user' do
       sign_in_user
 
-      it 'assigns new empty question to @question' do
-        get :index
-        expect(assigns(:question)).to be_a_new(Question)
-      end
-
-      it 'builds new attachment into attachments collection' do
-        get :index
-        expect(assigns(:question).attachments.first).to be_a_new(Attachment)
-      end
-
       it 'populates an array of all questions' do
         get :index
         expect(assigns(:questions)).to match_array(questions)
@@ -63,22 +53,6 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'renders show view' do
       expect(response).to render_template :show
-    end
-
-    it 'assigns empty answer to @answer for the question' do
-      expect(assigns(:answer)).to be_a_new(Answer)
-      expect(assigns(:answer).question_id).to eq question.id
-    end
-
-    it 'assigns empty comment as @comment for the question' do
-      expect(assigns(:comment)).to be_a_new(Comment)
-
-      expect(assigns(:comment).commentable_id).to eq question.id
-      expect(assigns(:comment).commentable_type).to eq 'Question'
-    end
-
-    it 'builds new empty attachment for new empty answer' do
-      expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
     end
   end
 
@@ -143,9 +117,9 @@ RSpec.describe QuestionsController, type: :controller do
         expect(question.title).to_not eq 'edited_title'
       end
 
-      it 'renders update js view' do
+      it 'renders forbidden status view' do
         patch :update, id: question, question: { body: 'edited_body', title: 'edited_title' }, format: :js
-        expect(response).to render_template :update
+        expect(response).to be_forbidden
       end
     end
 
@@ -205,6 +179,7 @@ RSpec.describe QuestionsController, type: :controller do
       it 'does not save question into DB' do
         expect { post :create, question: attributes_for(:question), format: :js }.to_not change(Question, :count)
       end
+
       it 'redirects to sign in view' do
         post :create, question: attributes_for(:question)
         expect(response).to redirect_to new_user_session_path
@@ -236,7 +211,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'redirects to show view' do
         delete :destroy, id: question
-        expect(response).to redirect_to question_path(assigns(:question))
+        expect(response).to be_forbidden
       end
     end
 
