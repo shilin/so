@@ -2,7 +2,6 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   before_action :find_and_auth_user
 
   def facebook
-    # render json: request.env['omniauth.auth']
   end
 
   private
