@@ -12,12 +12,24 @@ RSpec.describe User, type: :model do
 
   describe '.find_for_oauth' do
     let!(:user) { create(:user) }
-    let(:auth) { OmniAuth::AuthHash.new(provider: 'facebook', uid: '123456') }
-    context 'user already has identity' do
-      it 'returns the user' do
-        user.identities.create(provider: 'facebook', uid: '123456')
+    let(:auth_facebook) { OmniAuth::AuthHash.new(provider: 'facebook', uid: '123456') }
+    let(:auth_twitter) { OmniAuth::AuthHash.new(provider: 'twitter', uid: '123456') }
 
-        expect(User.find_for_oauth(auth)).to eq user
+    context 'user already has identity' do
+      context 'of facebook' do
+        it 'returns the user' do
+          user.identities.create(provider: 'facebook', uid: '123456')
+
+          expect(User.find_for_oauth(auth_facebook)).to eq user
+        end
+      end
+
+      context 'of twitter' do
+        it 'returns the user' do
+          user.identities.create(provider: 'twitter', uid: '123456')
+
+          expect(User.find_for_oauth(auth_twitter)).to eq user
+        end
       end
     end
 
