@@ -7,34 +7,35 @@
     - answer.attachments.each do |a|
       = div_for a
         = link_to a.file.file.filename, a.file.url
-        - if current_user_author?(answer)
+        - if can? :update, answer
           = link_to 'Remove file', answer_path(answer,
             answer: {attachments_attributes: {id: a, _destroy: true}}), remote: true, method: :patch, class: 'answer-author-only'
 
-    - if current_user_author?(answer)
-      span
+    span
+    - if can? :destroy, answer
         = link_to 'Delete answer', answer, remote: true, method: :delete, class: 'answer-author-only'
-        = link_to 'Edit answer', '', class: ['edit-answer-link', 'answer-author-only'], data: {answer_id: answer.id}
+    - if can? :edit, answer
+      = link_to 'Edit answer', '', class: ['edit-answer-link', 'answer-author-only'], data: {answer_id: answer.id}
 
       = form_for answer, remote: true, html: {class: 'hidden'} do |f|
         = render 'shared/answer_body_fields', f: f
         <br/>
         = f.submit 'Save answer'
 
-    - if current_user && !current_user_author?(answer)
+    - if can? :vote_upon, answer
       = link_to '+', upvote_answer_path(answer), method: :patch, remote: true, data: {type: :json}, class: ['upvote-answer-link', 'not-answer-author-only']
       = link_to '-', downvote_answer_path(answer), method: :patch, remote: true, data: {type: :json}, class: ['downvote-answer-link', 'not-answer-author-only']
       = link_to 'call off the vote', unvote_answer_path(answer), method: :patch, remote: true, data: {type: :json}, class: ['unvote-answer-link', 'not-answer-author-only']
 
 
-    - if current_user_author?(answer.question)
+    - if can? :set_best, answer
       = link_to 'Set as best answer', set_best_answer_path(answer, answer: {best: true}), method: :patch, remote: true, class: ['set-best-answer-link', 'question-author-only']
 
     #answer_comments_list
       ul
         = render partial: 'shared/comment', collection: answer.comments.order_by_create
 
-    - if current_user
+    - if user_signed_in?
       div.answer-comment-link
         = link_to 'Add a comment', '', class: 'add-comment-link', id: "add-comment-link-answer_#{answer.id}", data: {related_form_id: "answer_form_#{answer.id}" }
 

@@ -2,11 +2,12 @@ class QuestionsController < ApplicationController
   include Voted
 
   before_action :authenticate_user!, except: [:index, :show]
+  authorize_resource
   before_action :load_question, except: [:new, :index, :create]
   before_action :check_authorship, only: [:destroy, :update]
   before_action :gon_current_user, only: [:show, :index]
 
-  respond_to :json, :js
+  respond_to :js, :json
 
   def index
     respond_with(@questions = Question.all)

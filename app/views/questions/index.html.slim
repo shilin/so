@@ -6,7 +6,7 @@ div#questions_list
     p
       = link_to 'Ask a new question', '#', class: 'ask-question-link'
 
-- if user_signed_in?
+- if can? :create, Question
   div.validation_errors
   = form_for (question = Question.new), remote: true do |f|
     = render 'question_fields', question: question, f: f

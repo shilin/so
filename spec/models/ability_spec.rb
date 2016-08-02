@@ -38,7 +38,6 @@ RSpec.describe Ability do
       it { should be_able_to :create, Comment }
     end
 
-
     context 'to update' do
       it { should be_able_to :update, create(:question, user: user) }
       it { should_not be_able_to :update, create(:question, user: another_user) }
@@ -62,7 +61,6 @@ RSpec.describe Ability do
     end
 
     context 'to vote' do
-
       Ability::VOTE_ACTIONS.each do |va|
         Ability::VOTABLE_KLASSES.each do |vk|
           it { should be_able_to va.to_s.underscore.to_sym, create(vk.to_s.underscore.to_sym, user: another_user) }
