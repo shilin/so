@@ -246,7 +246,8 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'renders set_best js view' do
         patch :set_best, id: answer, answer: { best: true }, format: :js
-        expect(response).to render_template :set_best
+        # expect(response).to render_template :set_best
+        expect(response).to have_http_status :forbidden
       end
     end
 

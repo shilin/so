@@ -1,0 +1,6 @@
+h3 Provide your email
+= form_tag provide_email_path, method: :post do
+  = label :email, 'Your email'
+  br
+  = text_field_tag :email
+  = submit_tag

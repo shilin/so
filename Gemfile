@@ -44,6 +44,10 @@ gem 'thin'
 #gem 'mustache'
 gem 'gon'
 gem 'responders'
+gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'omniauth-twitter'
+gem 'cancancan'
 
 
 group :development, :test do

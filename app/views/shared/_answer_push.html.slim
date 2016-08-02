@@ -6,7 +6,7 @@ li id="answer_block_#{answer.id}"
   - answer.attachments.each do |a|
     = div_for a
       = link_to a.file.file.filename, a.file.url
-      - if current_user_author?(answer)
+      - if can? :update, answer
         = link_to 'Remove file', answer_path(answer,
           answer: {attachments_attributes: {id: a, _destroy: true}}), remote: true, method: :patch, class: 'answer-author-only'
 

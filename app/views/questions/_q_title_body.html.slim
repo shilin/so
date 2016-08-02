@@ -3,7 +3,7 @@ li class='question' id="question_#{q_title_body.id}"
     = q_title_body.title
   div#rating
     = q_title_body.rating
-  - if current_user && !current_user_author?(q_title_body)
+  - if can? :vote_upon, q_title_body
     = link_to '+', upvote_question_path(q_title_body), method: :patch, remote: true, data: {type: :json}, class: 'upvote-question-link'
     = link_to '-', downvote_question_path(q_title_body), method: :patch, remote: true, data: {type: :json}, class: 'downvote-question-link'
     = link_to 'call off the vote', unvote_question_path(q_title_body), method: :patch, remote: true, data: {type: :json}, class: 'unvote-question-link'
@@ -13,11 +13,12 @@ li class='question' id="question_#{q_title_body.id}"
     - q_title_body.attachments.each do |a|
       = div_for a
         = link_to a.file.file.filename, a.file.url
-        - if current_user_author?(q_title_body)
+        - if can? :destroy, q_title_body
           = link_to 'Remove file', question_path(q_title_body,
             question: {attachments_attributes: {id: a, _destroy: true}}), remote: true, method: :patch
 
-  - if current_user_author?(q_title_body)
+  - if can? :destroy, q_title_body
     p= link_to 'Delete', question_path(q_title_body), method: 'delete', class: 'delete-question-link'
+  - if can? :edit, q_title_body
     p= link_to 'Edit', '#', class: 'edit-question-link'
     <br/>
