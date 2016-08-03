@@ -13,7 +13,7 @@ shared_examples 'voted' do
         expect { patch :upvote, id: voted, format: :json }.not_to change(voted, :rating)
       end
 
-      it 'renders error_json' do
+      it 'renders unprocessable_entity status' do
         patch :upvote, id: voted.id, format: :json
         up_error_json = { id: voted.id, message: 'Unable to upvote' }.to_json
         expect(response.body).to eq up_error_json
@@ -27,7 +27,7 @@ shared_examples 'voted' do
         expect { patch :downvote, id: voted, format: :json }.not_to change(voted, :rating)
       end
 
-      it 'renders error_json' do
+      it 'renders unprocessable_entity status' do
         patch :downvote, id: voted, format: :json
         down_error_json = { id: voted.id, message: 'Unable to downvote' }.to_json
         expect(response.body).to eq down_error_json
@@ -41,7 +41,7 @@ shared_examples 'voted' do
         expect { patch :unvote, id: voted, format: :json }.not_to change(voted, :rating)
       end
 
-      it 'renders un_error_json' do
+      it 'renders unprocessable_entity status' do
         patch :unvote, id: voted, format: :json
         un_error_json = { id: voted.id, message: 'Unable to unvote' }.to_json
         expect(response.body).to eq un_error_json

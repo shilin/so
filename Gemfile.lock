@@ -44,6 +44,7 @@ GEM
       debug_inspector (>= 0.0.1)
     builder (3.2.2)
     byebug (8.2.4)
+    cancancan (1.15.0)
     capybara (2.7.1)
       addressable
       mime-types (>= 1.16)
@@ -349,6 +350,7 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
+  cancancan
   capybara
   capybara-webkit
   carrierwave
