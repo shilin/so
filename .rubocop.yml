@@ -4,7 +4,7 @@ AllCops:
     - Rakefile
     - config.ru
   Exclude:
-    - db/schema.rb*
+    - db/schema.rb
     - bin/*
     - spec/spec_helper.rb
     - db/migrate/*
