@@ -30,6 +30,7 @@ RSpec.describe Ability do
       it { should_not be_able_to :manage, :all }
 
       it { should be_able_to :read, :all }
+      it { should be_able_to :me, :profile }
     end
 
     context 'to create' do
