@@ -33,12 +33,32 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'capistrano-rails', group: :development
 
 gem 'slim-rails'
+gem 'devise'
+gem 'html2slim'
+gem 'jquery-turbolinks'
+gem 'carrierwave'
+gem 'remotipart'
+gem 'cocoon'
+gem 'private_pub'
+gem 'thin'
+#gem 'mustache'
+gem 'gon'
+gem 'responders'
+gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'omniauth-twitter'
+gem 'cancancan'
+gem 'doorkeeper'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
+  gem 'capybara-webkit'
+  gem 'selenium-webdriver', '~> 2.53.4'
+  gem 'database_cleaner'
 end
 
 group :development do
@@ -47,9 +67,14 @@ group :development do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  gem 'guard-rspec', require: false
+  gem 'rubocop', require: false
 end
 
 group :test do
   gem 'shoulda-matchers'
+  gem 'capybara'
+  gem 'launchy'
+  gem 'json_spec'
 end
 

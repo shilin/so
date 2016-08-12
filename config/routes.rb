@@ -1,9 +1,26 @@
 Rails.application.routes.draw do
+  use_doorkeeper
+  devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
+
+  devise_scope :user do
+    post 'provide_email', to: 'omniauth_callbacks#provide_email'
+  end
+
+  namespace :api do
+    namespace :v1 do
+      resources :profiles do
+        get :me, on: :collection
+      end
+    end
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
+
+  root 'questions#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
@@ -13,9 +30,23 @@ Rails.application.routes.draw do
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
+  # TODO add concern commentable
 
-  resources :questions, shallow: true do
-    resources :answers
+  concern :votable do
+    member do
+      patch :upvote
+      patch :downvote
+      patch :unvote
+    end
+  end
+
+  resources :questions, concerns: :votable, shallow: true do
+    resources :comments, defaults: { commentable: 'questions' }
+
+    resources :answers, concerns: :votable, shallow: true do
+      resources :comments, defaults: { commentable: 'answers' }
+      patch :set_best, on: :member
+    end
   end
 
   # Example resource route with options:

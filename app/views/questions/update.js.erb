@@ -1,0 +1,14 @@
+<% if @question.errors.present? %>
+
+<% @question.errors.full_messages.each do |message| %>
+    $('#validation_errors').append('<%= message %>')
+<% end %>
+
+  <% else %>
+      $('.question').html('<%= j render partial: "questions/q_title_body", locals: {q_title_body: @question} %>')
+<% end %>
+
+
+$('#flash').html('<%= j render "shared/flash" %>')
+
+

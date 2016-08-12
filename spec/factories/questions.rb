@@ -1,11 +1,17 @@
 FactoryGirl.define do
+  sequence :title do |n|
+    "MyQuestionTitle#{n}"
+  end
+
   factory :question do
-    title "MyTitle"
-    body "MyBody"
+    title
+    body 'MyQuestionBody'
+    user
   end
 
   factory :invalid_question, class: Question do
     title nil
     body nil
+    user
   end
 end

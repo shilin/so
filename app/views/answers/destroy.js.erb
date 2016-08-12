@@ -1,0 +1,15 @@
+<% if @answer.errors.present? %>
+
+<% @answer.errors.full_messages.each do |message| %>
+    $('#validation_errors').append('<%= message %>')
+<% end %>
+
+  <% else %>
+      $("#answer_block_<%=@answer.id%>").remove()
+<% end %>
+
+
+$('#flash').html('<%= j render "shared/flash" %>')
+
+
+

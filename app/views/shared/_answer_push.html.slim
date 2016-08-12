@@ -1,0 +1,42 @@
+li id="answer_block_#{answer.id}"
+  = answer.body
+
+  div.rating
+    = answer.rating
+  - answer.attachments.each do |a|
+    = div_for a
+      = link_to a.file.file.filename, a.file.url
+      - if can? :update, answer
+        = link_to 'Remove file', answer_path(answer,
+          answer: {attachments_attributes: {id: a, _destroy: true}}), remote: true, method: :patch, class: 'answer-author-only'
+
+  span
+    = link_to 'Delete answer', answer, remote: true, method: :delete, class: 'delete-answer-link'
+    = link_to 'Edit answer', '', class: ['edit-answer-link', 'answer-author-only'], data: {answer_id: answer.id}
+
+  = form_for answer, remote: true, html: {class: 'hidden'} do |f|
+    = render 'shared/answer_body_fields', f: f
+    <br/>
+    = f.submit 'Save answer'
+
+  = link_to '+', upvote_answer_path(answer), method: :patch, remote: true, data: {type: :json}, class: ['upvote-answer-link', 'vote', 'not-answer-author-only']
+  = link_to '-', downvote_answer_path(answer), method: :patch, remote: true, data: {type: :json}, class: ['downvote-answer-link', 'vote', 'not-answer-author-only']
+  = link_to 'call off the vote', unvote_answer_path(answer), method: :patch, remote: true, data: {type: :json}, class: ['unvote-answer-link', 'vote', 'not-answer-author-only']
+
+
+  = link_to 'Set as best answer', set_best_answer_path(answer, answer: {best: true}), method: :patch, remote: true, class: ['set-best-answer-link', 'question-author-only']
+
+#answer_comments_list
+  ul
+    = render partial: 'shared/comment', collection: answer.comments.order_by_create
+
+  div.answer-comment-link
+    = link_to 'Add a comment', '', class: 'add-comment-link', id: "add-comment-link-answer_#{answer.id}", data: {related_form_id: "answer_form_#{answer.id}" }
+
+  = render 'shared/comment_form', commentable: answer
+
+
+
+
+
+

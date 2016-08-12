@@ -1,0 +1,42 @@
+<% if @answer.errors.present? %>
+
+<% @answer.errors.full_messages.each do |message| %>
+    $('#validation_errors').append('<%= message %>')
+<% end %>
+
+  <% else %>
+    <% publish_to "/questions/#{@question.id}/answers" do %>
+      $('#answers_list>ul').append('<%= j render "shared/answer_push", answer: @answer %>')
+      $('.new_answer #answer_body').val('')
+      var cur_id = <%= current_user.id %>
+    //answer author
+    if (gon.currentUserId && (gon.currentUserId == <%= @answer.user_id %>)) {
+      $('.vote').hide();
+      $('.set-best-answer-link').hide();
+      console.log('answer author');
+      console.log('hide vote set-best');
+      console.log(gon.currentUserId);
+    }
+
+    //not answer author
+    if (gon.currentUserId != <%= @answer.user_id %>) {
+       $('.delete-answer-link').hide();
+       $('.edit-answer-link').hide();
+       $('.set-best-answer-link').hide();
+      console.log('not answer author');
+      console.log('answer.user_id' + <%= @answer.user_id %>);
+      console.log(gon.currentUserId);
+    }
+
+    if (gon.currentUserId != <%= @answer.question.user_id %>) {
+       $('.set-best-answer-link').show();
+    }
+      console.log('not answer author');
+      console.log(gon.currentUserId);
+      console.log('hi');
+    <% end %>
+<% end %>
+
+
+$('#flash').html('<%= j render "shared/flash" %>')
+

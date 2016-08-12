@@ -1,0 +1,6 @@
+- if !user_signed_in? && !request.path.eql?(new_user_session_path)
+  li
+    = link_to 'Log in', new_user_session_path
+- else
+  li
+    = link_to 'Log out', destroy_user_session_path, :method => :delete
