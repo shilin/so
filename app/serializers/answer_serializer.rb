@@ -1,4 +1,3 @@
-class AnswerSerializer < ActiveModel::Serializer
-  attributes :id, :question_id, :body, :created_at, :updated_at
-  # has_many :comments
+class AnswerSerializer < BaseBodySerializer
+  attributes :question_id
 end
