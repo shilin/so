@@ -107,4 +107,51 @@ describe 'Answers API' do
       end
     end
   end
+
+  describe 'POST /create' do
+    let!(:access_token) { create(:access_token) }
+    let!(:question) { create(:question) }
+
+    context 'unauthorized' do
+      it 'returns unauthorized status if there is no access_token' do
+        post api_v1_question_answers_path(question), answer: attributes_for(:answer), format: :json
+        expect(response).to have_http_status :unauthorized
+      end
+
+      it 'returns unauthorized status if access_token is invalid' do
+        post api_v1_question_answers_path(question), answer: attributes_for(:answer), format: :json, access_token: '1234'
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context 'authorized' do
+      context 'with valid attributes' do
+        let!(:user) { User.find(access_token.resource_owner_id) }
+
+        it 'returns CREATED status' do
+          post api_v1_question_answers_path(question), answer: attributes_for(:answer), format: :json, access_token: access_token.token
+          expect(response).to have_http_status :created
+        end
+
+        it 'assigns answer to the current user and question and saves it into the DB ' do
+          expect { post api_v1_question_answers_path(question), answer: attributes_for(:answer), format: :json, access_token: access_token.token }
+            .to change(user.answers, :count).by(1)
+          expect { post api_v1_question_answers_path(question), answer: attributes_for(:answer), format: :json, access_token: access_token.token }
+            .to change(question.answers, :count).by(1)
+        end
+      end
+
+      context 'with invalid attributes' do
+        it 'returns unprocessable_entity status' do
+          post api_v1_question_answers_path(question), answer: attributes_for(:invalid_answer), format: :json, access_token: access_token.token
+          expect(response).to have_http_status :unprocessable_entity
+        end
+
+        it 'does not save question into DB' do
+          expect { post api_v1_question_answers_path(question), answer: attributes_for(:invalid_answer), format: :json, access_token: access_token.token }
+            .to_not change(Question, :count)
+        end
+      end
+    end
+  end
 end
