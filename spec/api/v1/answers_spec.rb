@@ -1,6 +1,45 @@
 require 'rails_helper'
 
 describe 'Answers API' do
+  describe 'GET /index' do
+    let(:question) { create(:question) }
+    let(:access_token) { create(:access_token) }
+    let!(:answer) { create(:answer, question: question) }
+    let!(:attachment) { create(:attachment, attachable_type: 'Answer', attachable_id: answer.id) }
+    let!(:comment) { create(:comment, commentable_type: 'Answer', commentable_id: answer.id) }
+
+    context 'unauthorized' do
+      it 'returns unauthorized status if there is no access_token' do
+        get api_v1_question_answers_path(question), format: :json, access_token: '1234'
+        expect(response).to have_http_status :unauthorized
+      end
+
+      it 'returns unauthorized status if access_token is invalid' do
+        get api_v1_question_answers_path(question), format: :json, access_token: '1234'
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context 'authorized' do
+      before { get api_v1_question_answers_path(question), format: :json, access_token: access_token.token }
+
+      it 'returns OK status' do
+        expect(response).to have_http_status :ok
+      end
+
+      it 'contains exactly required attributes' do
+        pp api_v1_question_answers_path(question)
+        expect(JSON.parse(response.body)['answers'][0].keys).to contain_exactly('id', 'question_id', 'body', 'comments', 'attachments', 'created_at', 'updated_at')
+      end
+
+      %w(id body created_at updated_at).each do |attr|
+        it "answer object contains #{attr}" do
+          expect(response.body).to be_json_eql(answer.send(attr.to_sym).to_json).at_path("answers/0/#{attr}")
+        end
+      end
+    end
+  end
+
   describe 'GET /show' do
     let(:question) { create(:question) }
     let(:access_token) { create(:access_token) }
