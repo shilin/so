@@ -8,17 +8,7 @@ describe 'Answers API' do
     let!(:attachment) { create(:attachment, attachable_type: 'Answer', attachable_id: answer.id) }
     let!(:comment) { create(:comment, commentable_type: 'Answer', commentable_id: answer.id) }
 
-    context 'unauthorized' do
-      it 'returns unauthorized status if there is no access_token' do
-        get api_v1_question_answers_path(question), format: :json, access_token: '1234'
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'returns unauthorized status if access_token is invalid' do
-        get api_v1_question_answers_path(question), format: :json, access_token: '1234'
-        expect(response).to have_http_status :unauthorized
-      end
-    end
+    it_behaves_like 'API authenticable'
 
     context 'authorized' do
       before { get api_v1_question_answers_path(question), format: :json, access_token: access_token.token }
@@ -28,8 +18,8 @@ describe 'Answers API' do
       end
 
       it 'contains exactly required attributes' do
-        pp api_v1_question_answers_path(question)
-        expect(JSON.parse(response.body)['answers'][0].keys).to contain_exactly('id', 'question_id', 'body', 'comments', 'attachments', 'created_at', 'updated_at')
+        expect(JSON.parse(response.body)['answers'][0].keys)
+          .to contain_exactly('id', 'question_id', 'body', 'comments', 'attachments', 'created_at', 'updated_at')
       end
 
       %w(id body created_at updated_at).each do |attr|
@@ -37,6 +27,10 @@ describe 'Answers API' do
           expect(response.body).to be_json_eql(answer.send(attr.to_sym).to_json).at_path("answers/0/#{attr}")
         end
       end
+    end
+
+    def make_request(options = {})
+      get api_v1_question_answers_path(question), { format: :json }.merge(options)
     end
   end
 
@@ -47,17 +41,7 @@ describe 'Answers API' do
     let!(:attachment) { create(:attachment, attachable_type: 'Answer', attachable_id: answer.id) }
     let!(:comment) { create(:comment, commentable_type: 'Answer', commentable_id: answer.id) }
 
-    context 'unauthorized' do
-      it 'returns unauthorized status if there is no access_token' do
-        get api_v1_answer_path(answer), format: :json, access_token: '1234'
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'returns unauthorized status if access_token is invalid' do
-        get api_v1_answer_path(answer), format: :json, access_token: '1234'
-        expect(response).to have_http_status :unauthorized
-      end
-    end
+    it_behaves_like 'API authenticable'
 
     context 'authorized' do
       before { get api_v1_answer_path(answer), format: :json, access_token: access_token.token }
@@ -68,7 +52,8 @@ describe 'Answers API' do
 
       it 'contains exactly required attributes' do
         pp api_v1_answer_path(answer)
-        expect(JSON.parse(response.body)['answer'].keys).to contain_exactly('id', 'question_id', 'body', 'comments', 'attachments', 'created_at', 'updated_at')
+        expect(JSON.parse(response.body)['answer'].keys)
+          .to contain_exactly('id', 'question_id', 'body', 'comments', 'attachments', 'created_at', 'updated_at')
       end
 
       %w(id body created_at updated_at).each do |attr|
@@ -106,23 +91,17 @@ describe 'Answers API' do
         end
       end
     end
+
+    def make_request(options = {})
+      get api_v1_answer_path(answer), { format: :json }.merge(options)
+    end
   end
 
   describe 'POST /create' do
     let!(:access_token) { create(:access_token) }
     let!(:question) { create(:question) }
 
-    context 'unauthorized' do
-      it 'returns unauthorized status if there is no access_token' do
-        post api_v1_question_answers_path(question), answer: attributes_for(:answer), format: :json
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'returns unauthorized status if access_token is invalid' do
-        post api_v1_question_answers_path(question), answer: attributes_for(:answer), format: :json, access_token: '1234'
-        expect(response).to have_http_status :unauthorized
-      end
-    end
+    it_behaves_like 'API authenticable'
 
     context 'authorized' do
       context 'with valid attributes' do
@@ -134,24 +113,46 @@ describe 'Answers API' do
         end
 
         it 'assigns answer to the current user and question and saves it into the DB ' do
-          expect { post api_v1_question_answers_path(question), answer: attributes_for(:answer), format: :json, access_token: access_token.token }
-            .to change(user.answers, :count).by(1)
-          expect { post api_v1_question_answers_path(question), answer: attributes_for(:answer), format: :json, access_token: access_token.token }
-            .to change(question.answers, :count).by(1)
+          expect do
+            post api_v1_question_answers_path(question),
+                 answer: attributes_for(:answer),
+                 format: :json,
+                 access_token: access_token.token
+          end.to change(user.answers, :count).by(1)
+          expect do
+            post api_v1_question_answers_path(question),
+                 answer: attributes_for(:answer),
+                 format: :json,
+                 access_token: access_token.token
+          end.to change(question.answers, :count).by(1)
         end
       end
 
       context 'with invalid attributes' do
         it 'returns unprocessable_entity status' do
-          post api_v1_question_answers_path(question), answer: attributes_for(:invalid_answer), format: :json, access_token: access_token.token
+          post api_v1_question_answers_path(question),
+               answer: attributes_for(:invalid_answer),
+               format: :json,
+               access_token: access_token.token
+
           expect(response).to have_http_status :unprocessable_entity
         end
 
         it 'does not save question into DB' do
-          expect { post api_v1_question_answers_path(question), answer: attributes_for(:invalid_answer), format: :json, access_token: access_token.token }
-            .to_not change(Question, :count)
+          expect do
+            post api_v1_question_answers_path(question),
+                 answer: attributes_for(:invalid_answer),
+                 format: :json,
+                 access_token: access_token.token
+          end.to_not change(Question, :count)
         end
       end
+    end
+
+    def make_request(options = {})
+      post api_v1_question_answers_path(question), {
+        answer: attributes_for(:answer), format: :json
+      }.merge(options)
     end
   end
 end
