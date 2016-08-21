@@ -6,17 +6,7 @@ describe 'Profile API' do
   let(:access_token) { create(:access_token, resource_owner_id: me.id) }
 
   describe 'GET #index' do
-    context 'unauthorized' do
-      it 'returns unauthorized status if there is no access_token' do
-        get '/api/v1/profiles/', format: :json
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'returns unauthorized status if access_token is invalid' do
-        get '/api/v1/profiles/', format: :json, access_token: '1234'
-        expect(response).to have_http_status :unauthorized
-      end
-    end
+    it_behaves_like 'API authenticable'
 
     context 'authorized' do
       before { get '/api/v1/profiles/', format: :json, access_token: access_token.token }
@@ -31,20 +21,14 @@ describe 'Profile API' do
         end
       end
     end
+
+    def make_request(options = {})
+      get '/api/v1/profiles/', { format: :json }.merge(options)
+    end
   end
 
   describe 'GET #me' do
-    context 'unauthorized' do
-      it 'returns unauthorized status if there is no access_token' do
-        get '/api/v1/profiles/me', format: :json
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'returns unauthorized status if access_token is invalid' do
-        get '/api/v1/profiles/me', format: :json, access_token: '1234'
-        expect(response).to have_http_status :unauthorized
-      end
-    end
+    it_behaves_like 'API authenticable'
 
     context 'authorized' do
       before { get '/api/v1/profiles/me', format: :json, access_token: access_token.token }
@@ -64,6 +48,10 @@ describe 'Profile API' do
           expect(response.body).to_not have_json_path(attr)
         end
       end
+    end
+
+    def make_request(options = {})
+      get '/api/v1/profiles/me', { format: :json }.merge(options)
     end
   end
 end

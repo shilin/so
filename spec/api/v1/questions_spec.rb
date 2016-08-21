@@ -2,17 +2,7 @@ require 'rails_helper'
 
 describe 'Questions API' do
   describe 'GET /index' do
-    context 'unauthorized' do
-      it 'returns unauthorized status if there is no access_token' do
-        get api_v1_questions_path, format: :json
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'returns unauthorized status if access_token is invalid' do
-        get api_v1_questions_path, format: :json, access_token: '1234'
-        expect(response).to have_http_status :unauthorized
-      end
-    end
+    it_behaves_like 'API authenticable'
 
     context 'authorized' do
       let(:access_token) { create(:access_token) }
@@ -55,6 +45,10 @@ describe 'Questions API' do
           expect(JSON.parse(response.body)['questions'][0]['answers'][0].keys).to contain_exactly('id', 'question_id', 'body', 'created_at', 'updated_at')
         end
       end
+    end
+
+    def make_request(options = {})
+      get api_v1_questions_path, { format: :json }.merge(options)
     end
   end
 
@@ -148,17 +142,7 @@ describe 'Questions API' do
   describe 'POST /create' do
     let(:access_token) { create(:access_token) }
 
-    context 'unauthorized' do
-      it 'returns unauthorized status if there is no access_token' do
-        post api_v1_questions_path, question: attributes_for(:question), format: :json
-        expect(response).to have_http_status :unauthorized
-      end
-
-      it 'returns unauthorized status if access_token is invalid' do
-        post api_v1_questions_path, question: attributes_for(:question), format: :json, access_token: '1234'
-        expect(response).to have_http_status :unauthorized
-      end
-    end
+    it_behaves_like 'API authenticable'
 
     context 'authorized' do
       context 'with valid attributes' do
@@ -187,6 +171,10 @@ describe 'Questions API' do
             .to_not change(Question, :count)
         end
       end
+    end
+
+    def make_request(options = {})
+      post api_v1_questions_path, { question: attributes_for(:question), format: :json }.merge(options)
     end
   end
 end
