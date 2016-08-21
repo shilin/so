@@ -22,8 +22,8 @@ require 'cancan/matchers'
 # require only the support files necessary.
 #
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
-Dir[Rails.root.join('spec/models/concerns/**/*_spec.rb')].each { |f| require f }
-Dir[Rails.root.join('spec/controllers/concerns/**/*_spec.rb')].each { |f| require f }
+Dir[Rails.root.join('spec/models/shared/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec/controllers/shared/**/*.rb')].each { |f| require f }
 # Checks for pending migration and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 
