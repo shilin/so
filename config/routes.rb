@@ -1,9 +1,15 @@
 Rails.application.routes.draw do
+  require 'sidekiq/web'
+
   use_doorkeeper
   devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
 
   devise_scope :user do
     post 'provide_email', to: 'omniauth_callbacks#provide_email'
+  end
+
+  authenticate :user, ->(user) { user.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
   end
 
   namespace :api do

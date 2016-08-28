@@ -10,6 +10,12 @@ class User < ActiveRecord::Base
   has_many :comments, dependent: :destroy
   has_many :identities, dependent: :destroy
 
+  def self.send_daily_digest
+    find_each do |user|
+      DailyMailer.digest(user).deliver_later
+    end
+  end
+
   def self.find_for_oauth(auth)
     identity = Identity.where(provider: auth.provider, uid: auth.uid.to_s).first
 
