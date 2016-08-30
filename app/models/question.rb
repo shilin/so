@@ -1,6 +1,7 @@
 class Question < ActiveRecord::Base
   include Votable
   include Commentable
+  include Subscribable
 
   scope :posted_yesterday, -> { where(created_at: Time.zone.now.yesterday.all_day) }
 

@@ -31,7 +31,7 @@ class Ability
 
     can :me, :profile
 
-    can :create, [Question, Answer, Comment]
+    can :create, [Question, Answer, Comment, Subscription]
 
     can :update, Question, user: user
     can :update, Answer, user: user
@@ -40,6 +40,7 @@ class Ability
     can :destroy, Question, user: user
     can :destroy, Answer, user: user
     can :destroy, Comment, user: user
+    can :destroy, Subscription, user: user
 
     VOTE_ACTIONS.each do |va|
       VOTABLE_KLASSES.each do |vk|

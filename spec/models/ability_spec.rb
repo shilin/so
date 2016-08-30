@@ -25,6 +25,8 @@ RSpec.describe Ability do
     let(:question) { create(:question) }
     let(:comment) { create(:comment, user: user, commentable_type: :question, commentable_id: question.id) }
     let(:another_user_comment) { create(:comment, user: another_user, commentable_type: :question, commentable_id: question.id) }
+    let(:subscription) { create(:subscription, user: user, subscribable_type: :question, subscribable_id: question.id) }
+    let(:another_user_subscription) { create(:subscription, user: another_user, subscribable_type: :question, subscribable_id: question.id) }
 
     context 'to have guest abilities' do
       it { should_not be_able_to :manage, :all }
@@ -37,6 +39,7 @@ RSpec.describe Ability do
       it { should be_able_to :create, Question }
       it { should be_able_to :create, Answer }
       it { should be_able_to :create, Comment }
+      it { should be_able_to :create, Subscription }
     end
 
     context 'to update' do
@@ -59,6 +62,9 @@ RSpec.describe Ability do
 
       it { should be_able_to :destroy, comment }
       it { should_not be_able_to :destroy, another_user_comment }
+
+      it { should be_able_to :destroy, subscription }
+      it { should_not be_able_to :destroy, another_user_subscription }
     end
 
     context 'to vote' do

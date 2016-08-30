@@ -4,6 +4,10 @@
   = render 'question_title_body_fields', question: @question, f: f
   = f.submit 'Save'
 
+.subscription
+  - if user_signed_in?
+    = render partial: 'subscriptions/links', locals: { subscribable: @question }
+
 #answers_list
   ul
     = render partial: 'shared/answer', collection: @question.answers.best_first

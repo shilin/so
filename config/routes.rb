@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'subscriptions/create'
+
   require 'sidekiq/web'
 
   use_doorkeeper
@@ -49,8 +51,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :questions do
+    resources :subscriptions, defaults: { subscribable: 'questions' }
+  end
+
   resources :questions, concerns: :votable, shallow: true do
     resources :comments, defaults: { commentable: 'questions' }
+    resources :subscriptions, defaults: { subscribable: 'questions' }
 
     resources :answers, concerns: :votable, shallow: true do
       resources :comments, defaults: { commentable: 'answers' }
