@@ -1,5 +1,5 @@
 class DailyDigestJob < ActiveJob::Base
-  queue_as :default
+  queue_as :mailer
 
   def perform
     User.find_each do |user|

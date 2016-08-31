@@ -4,6 +4,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_answer, only: [:update, :destroy, :set_best]
   before_action :load_question, only: [:create]
+
   authorize_resource
   # before_action :check_authorship, only: [:update, :destroy]
 

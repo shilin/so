@@ -20,7 +20,7 @@ RSpec.describe DailyMailer, type: :mailer do
     end
 
     it 'renders the body' do
-      expect(mail.body.encoded).to match('')
+      expect(mail.body.encoded).to match('Here are new questions, appeared on our site')
     end
   end
 end
