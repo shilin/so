@@ -47,7 +47,7 @@ RSpec.describe Answer, type: :model do
   end
 
   it 'calls QuestionNotificationJob when answer successfully saved' do
-    expect(QuestionNotificationJob).to receive(:perform_later).with(answer)
+    expect(QuestionNotificationJob).to receive(:perform_later).with(answer.question)
     answer.committed!
   end
 end

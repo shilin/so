@@ -24,6 +24,6 @@ class Answer < ActiveRecord::Base
   private
 
   def notify
-    QuestionNotificationJob.perform_later(self) if persisted?
+    QuestionNotificationJob.perform_later(question) if persisted?
   end
 end

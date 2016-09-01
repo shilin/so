@@ -161,6 +161,13 @@ RSpec.describe QuestionsController, type: :controller do
           post :create, question: attributes_for(:question), format: :js
           expect(response).to render_template :create
         end
+
+        it 'subscribes user to question updates notification' do
+          expect do
+            post :create, question: attributes_for(:question), format: :js
+          end
+            .to change(@user.subscriptions, :count).by(1)
+        end
       end
 
       context 'with invalid attributes' do

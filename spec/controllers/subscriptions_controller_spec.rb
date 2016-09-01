@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe SubscriptionsController, type: :controller do
-  let(:question) { create(:question) }
+  let!(:question) { create(:question) }
 
   describe 'POST #create subscription for question' do
     context 'Authenticated user' do
@@ -30,6 +30,7 @@ RSpec.describe SubscriptionsController, type: :controller do
 
     context 'Not authenticated user' do
       it 'does not save a subscription to DB' do
+        puts 'im in not auth user'
         expect do
           post :create,
                question_id: question.id,

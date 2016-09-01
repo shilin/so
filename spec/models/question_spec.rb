@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Question, type: :model do
+  let(:question) { create(:question) }
+
   it_behaves_like 'votable'
   it_behaves_like 'commentable'
   it_behaves_like 'attachable'
