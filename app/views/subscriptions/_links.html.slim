@@ -1,0 +1,5 @@
+- if @subscription = subscribable.subscriptions.find_by(user: current_user)
+  = link_to 'Unsubscribe from new answers notification', polymorphic_path([subscribable, @subscription]), method: :delete, remote: true
+- else
+  = link_to 'Subscribe to new answers notification', polymorphic_path([subscribable, :subscriptions]), method: :post, remote: true
+

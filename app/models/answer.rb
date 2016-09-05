@@ -10,6 +10,8 @@ class Answer < ActiveRecord::Base
 
   validates :body, :question_id, :user_id, presence: true
 
+  after_commit :notify, on: :create
+
   accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
 
   def set_as_best
@@ -17,5 +19,11 @@ class Answer < ActiveRecord::Base
       Answer.where(question_id: question_id, best: true).update_all(best: false)
       update!(best: true)
     end
+  end
+
+  private
+
+  def notify
+    QuestionNotificationJob.perform_later(question) if persisted?
   end
 end

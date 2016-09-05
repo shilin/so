@@ -1,9 +1,17 @@
 Rails.application.routes.draw do
+  get 'subscriptions/create'
+
+  require 'sidekiq/web'
+
   use_doorkeeper
   devise_for :users, controllers: { omniauth_callbacks: 'omniauth_callbacks' }
 
   devise_scope :user do
     post 'provide_email', to: 'omniauth_callbacks#provide_email'
+  end
+
+  authenticate :user, ->(user) { user.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
   end
 
   namespace :api do
@@ -43,8 +51,13 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :questions do
+    resources :subscriptions, defaults: { subscribable: 'questions' }
+  end
+
   resources :questions, concerns: :votable, shallow: true do
     resources :comments, defaults: { commentable: 'questions' }
+    resources :subscriptions, defaults: { subscribable: 'questions' }
 
     resources :answers, concerns: :votable, shallow: true do
       resources :comments, defaults: { commentable: 'answers' }

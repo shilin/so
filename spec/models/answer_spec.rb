@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Answer, type: :model do
   let(:user) { create(:user) }
   let(:question) { create(:question, user: user) }
+  let(:answer) { create(:answer, question: question, user: user) }
 
   it { should belong_to :question }
   it { should belong_to :user }
@@ -43,5 +44,10 @@ RSpec.describe Answer, type: :model do
 
       expect(first_answer_in_list).to be_best
     end
+  end
+
+  it 'calls QuestionNotificationJob when answer successfully saved' do
+    expect(QuestionNotificationJob).to receive(:perform_later).with(answer.question)
+    answer.committed!
   end
 end

@@ -1,0 +1,14 @@
+doctype html
+
+html
+  head
+    meta content=("text/html; charset=UTF-8") http-equiv="Content-Type"
+
+  body
+
+    h1 New answers appeared
+    p Here are new answers for the question, you wished to be notified about
+
+    p
+        p= link_to @question.title, question_url(@question)
+

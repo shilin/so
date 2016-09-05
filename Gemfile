@@ -50,6 +50,9 @@ gem 'omniauth-twitter'
 gem 'cancancan'
 gem 'doorkeeper'
 gem 'active_model_serializers'
+gem 'sidekiq'
+gem 'sinatra', require: nil
+gem 'whenever'
 
 
 group :development, :test do

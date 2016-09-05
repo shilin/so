@@ -1,0 +1,16 @@
+doctype html
+
+html
+  head
+    meta content=("text/html; charset=UTF-8") http-equiv="Content-Type"
+
+  body
+
+    h1 Yesterday digest
+    p Here are new questions, appeared on our site.
+
+    p
+      - @questions.each do |question|
+        p= link_to question.title, question_url(question)
+
+    p= link_to "View all", "http://localhost:3000/questions"
