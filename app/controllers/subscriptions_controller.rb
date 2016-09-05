@@ -26,7 +26,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def get_subscription
-    raise CanCan::AccessDenied unless @subscription = @subscribable.subscriptions.find_by(user: current_user)
+    @subscription = Subscription.find(params[:id])
   end
 
   def model_klass
