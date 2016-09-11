@@ -27,3 +27,7 @@ config/database.yml
 /coverage
 
 .powrc
+
+dump.rdb
+config/*.sphinx.conf
+db/sphinx

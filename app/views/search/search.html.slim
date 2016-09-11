@@ -1,0 +1,6 @@
+-if @search.any?
+  - @search.each do |item|
+    = render "#{item.class.name.pluralize.underscore}/found_item", item: item
+    br
+-else
+  | Sorry, nothing found.

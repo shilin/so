@@ -70,17 +70,33 @@ RSpec.configure do |config|
 
   config.include MockOmniAuthMacros, type: :feature
 
+  config.include SphinxMacros, type: :feature
+  config.include SphinxMacros, type: :sphinx
+
   config.before(:each) do
     OmniAuth.config.mock_auth[:facebook] = nil
     OmniAuth.config.mock_auth[:twitter] = nil
   end
 
   config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
+    # Ensure sphinx directories exist for the test environment
+    ThinkingSphinx::Test.init
+    #
+    # Configure and start Sphinx, and automatically
+    # stop Sphinx at the end of the test suite.
+    ThinkingSphinx::Test.start_with_autostop
+
+    # DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.strategy = :truncation
   end
 
   config.before(:each) do
-    DatabaseCleaner.strategy = :transaction
+    # DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.strategy = :truncation
+  end
+
+  config.before(:each, type: :sphinx) do
+    DatabaseCleaner.strategy = :truncation
   end
 
   config.before(:each, js: true) do

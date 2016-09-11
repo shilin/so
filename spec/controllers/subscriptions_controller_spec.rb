@@ -30,7 +30,6 @@ RSpec.describe SubscriptionsController, type: :controller do
 
     context 'Not authenticated user' do
       it 'does not save a subscription to DB' do
-        puts 'im in not auth user'
         expect do
           post :create,
                question_id: question.id,
