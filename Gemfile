@@ -53,6 +53,8 @@ gem 'active_model_serializers'
 gem 'sidekiq'
 gem 'sinatra', require: nil
 gem 'whenever'
+gem 'mysql2'
+gem 'thinking-sphinx'
 
 
 group :development, :test do
