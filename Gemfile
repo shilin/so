@@ -58,6 +58,7 @@ gem 'thinking-sphinx'
 gem 'dotenv'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
 gem 'therubyracer'
+gem 'capistrano-sidekiq', require: false
 
 
 group :development, :test do
