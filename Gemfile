@@ -59,6 +59,7 @@ gem 'dotenv'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
 gem 'therubyracer'
 gem 'capistrano-sidekiq', require: false
+gem 'unicorn'
 
 
 group :development, :test do
@@ -83,6 +84,7 @@ group :development do
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rails', require: false
   gem 'capistrano-rvm', require: false
+  gem 'capistrano3-unicorn', require: false
 end
 
 group :test do
