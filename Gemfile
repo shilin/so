@@ -60,6 +60,7 @@ gem 'dotenv-deployment', require: 'dotenv/deployment'
 gem 'therubyracer'
 gem 'capistrano-sidekiq', require: false
 gem 'unicorn'
+gem 'redis-rails'
 
 
 group :development, :test do

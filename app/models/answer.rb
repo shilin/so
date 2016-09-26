@@ -5,7 +5,7 @@ class Answer < ActiveRecord::Base
   scope :best_first, -> { order(best: :desc, created_at: :asc) }
 
   has_many :attachments, as: :attachable, dependent: :destroy
-  belongs_to :question
+  belongs_to :question, touch: true
   belongs_to :user
 
   validates :body, :question_id, :user_id, presence: true

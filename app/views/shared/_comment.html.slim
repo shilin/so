@@ -1,3 +1,4 @@
 - if comment.persisted?
-  li id="comment_#{comment.id}" class='comment'
-    = comment.body
+  - cache_for_user_role('comment_body', comment) do
+    li id="comment_#{comment.id}" class='comment'
+      = comment.body
