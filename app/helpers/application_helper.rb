@@ -7,8 +7,15 @@ module ApplicationHelper
     end
   end
 
-  def cache_for_user_role(prefix, model)
-    cache_unless current_user.try(:admin), [prefix.to_s, user_signed_in?, current_user_author?(model), model] do
+  def cache_for_user_role(params_hash)
+    cache_unless current_user.try(:admin),
+                 [
+                   params_hash[:prefix],
+                   params_hash[:model],
+                   user_signed_in?,
+                   current_user_author?(params_hash[:related_model]),
+                   current_user_author?(params_hash[:model])
+                 ] do
       yield
     end
   end

@@ -1,5 +1,5 @@
 - if answer.persisted?
-  - cache answer do
+  - cache_for_user_role({prefix: :answer_block, model: answer, related_model: answer.question}) do
     li id="answer_block_#{answer.id}"
       = answer.body
 

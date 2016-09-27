@@ -1,4 +1,4 @@
 - if comment.persisted?
-  - cache_for_user_role('comment_body', comment) do
+  - cache_for_user_role({prefix: :comment_body, model: comment}) do
     li id="comment_#{comment.id}" class='comment'
       = comment.body

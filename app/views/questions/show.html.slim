@@ -1,4 +1,4 @@
-- cache_for_user_role('question_show', @question) do
+- cache_for_user_role({prefix: :question_show, model: @question}) do
   = render 'q_title_body',  q_title_body: @question
 
   = form_for @question, remote: true do |f|
