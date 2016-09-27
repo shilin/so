@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class QuestionNotificationJob < ActiveJob::Base
   queue_as :mailer
 

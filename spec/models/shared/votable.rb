@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 shared_examples_for 'votable' do
   let(:author) { create(:user) }
   let(:user) { create(:user) }

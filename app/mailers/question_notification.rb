@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class QuestionNotification < ApplicationMailer
   def notify(user, question)
     @question = question

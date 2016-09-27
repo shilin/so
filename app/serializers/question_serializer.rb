@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class QuestionSerializer < BaseBodySerializer
   attributes :title, :short_title
   has_many :answers

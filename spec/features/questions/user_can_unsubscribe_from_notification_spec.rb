@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative '../feature_helper'
 
 feature 'User can unsubscribe from new answer notification for question', %q(

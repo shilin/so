@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative '../feature_helper'
 
 feature 'User can see a question and its answers', %q(

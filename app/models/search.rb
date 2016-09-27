@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Search
   SEARCH_RESOURCES = %w(all user question answer comment).freeze
 

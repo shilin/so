@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative '../feature_helper'
 
 feature 'User can subscribe for new answer notification for question', %q(

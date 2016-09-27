@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require_relative '../feature_helper'
 
 feature 'Only author can choose the best answer for his question', %q(

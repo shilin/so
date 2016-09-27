@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # paths
 app_path = '/home/deployer/so'
 working_directory "#{app_path}/current"

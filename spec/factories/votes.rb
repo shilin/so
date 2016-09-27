@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 FactoryGirl.define do
   factory :upvote, class: Vote do
     state(1)

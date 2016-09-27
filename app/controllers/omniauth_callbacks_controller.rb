@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   before_action :find_and_auth_user
 

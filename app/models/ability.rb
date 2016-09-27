@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Ability
   VOTE_ACTIONS = [:upvote, :downvote, :unvote, :vote_upon].freeze
   VOTABLE_KLASSES = [Question, Answer].freeze

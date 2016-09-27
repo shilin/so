@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module ApplicationHelper
   def current_user_author?(obj)
     if current_user && obj.respond_to?(:user_id)
@@ -7,14 +8,14 @@ module ApplicationHelper
     end
   end
 
-  def cache_for_user_role(params_hash)
+  def cache_for_user_role(prefix: nil, model:, related_model: nil)
     cache_unless current_user.try(:admin),
                  [
-                   params_hash[:prefix],
-                   params_hash[:model],
+                   prefix,
+                   model,
                    user_signed_in?,
-                   current_user_author?(params_hash[:related_model]),
-                   current_user_author?(params_hash[:model])
+                   can?(:manage, model),
+                   can?(:manage, related_model)
                  ] do
       yield
     end
